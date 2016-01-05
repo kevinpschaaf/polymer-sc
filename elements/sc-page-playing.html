@@ -1,0 +1,108 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="sc-icons.html">
+<link rel="import" href="sc-player.html">
+
+<dom-module id="sc-page-playing">
+
+  <template>
+
+    <style>
+      .artwork-box {
+        display: block;
+        margin: 0 auto 24px;
+        position: relative;
+        height: 300px;
+        width: 300px;
+        min-width: 100%;
+      }
+      .artwork {
+        @apply(--layout-fit);
+        -webkit-filter: blur(10px) brightness(50%);
+        filter: blur(10px) brightness(50%);
+        margin: -15px -15px 0 -15px;
+      }
+      .playing > .artwork {
+        -webkit-filter: none;
+        filter: none;
+        margin: 0;
+      }
+      .details {
+        position: absolute;
+        left: 8px;
+        bottom: 8px;
+        right: 80px;
+      }
+      .byline, .title {
+        display: inline-block;
+        margin: 2px;
+        padding: 4px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+      }
+      .byline {
+        color: #aaa;
+        bottom: ;
+      }
+      .playpause {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        color: white;
+        height: 64px;
+        width: 64px;
+      }
+    </style>
+
+    <div class$="artwork-box {{_playingClass(playing)}}">
+      <iron-image class="artwork" src="{{_medArtwork(track.artwork_url)}}" sizing="cover">
+      </iron-image>
+      <div class="details">
+        <div class="byline">{{track.user.username}}</div><br>
+        <div class="title">{{track.title}}</div>
+      </div>
+      <paper-icon-button class="playpause" icon="{{_playingIcon(playing)}}" on-tap="_togglePlaying"></paper-icon-button>
+    </div>
+
+    <sc-player id="player" track="{{track}}" config="{{config}}" playing="{{playing}}"></sc-player>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'sc-page-playing',
+      properties: {
+      },
+      _medArtwork: function(url) {
+        return url && url.replace(/large.jpg$/, 't300x300.jpg');
+      },
+      _playingClass: function(playing) {
+        return playing ? 'playing' : '';
+      },
+      _playingIcon: function(playing) {
+        return playing ? 'pause-circle-outline' : 'play-circle-outline';
+      },
+      _togglePlaying: function() {
+        if (this.playing) {
+          this.$.player.pause();
+        } else {
+          this.$.player.play();
+        }
+      }
+    });
+  </script>
+
+</dom-module>

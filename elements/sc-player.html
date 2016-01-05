@@ -1,0 +1,193 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="sc-player">
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+        height: 100px;
+        background: #ff3d00;
+        position: relative;
+        overflow: hidden;
+      }
+
+      #container {
+        height: 100%;
+        position: relative;
+        transition: transform 500ms linear;
+      }
+      #container.tracking {
+        transition: none;
+      }
+
+      .blocker {
+        position: absolute;
+        background: #efefef;
+        height: 100%;
+        width: 50%;
+      }
+      .blocker.right {
+        left: 100%;
+      }
+
+      #waveform {
+        position: absolute;
+        left: 50%;
+        height: 100%;
+        background-size: 100% 100%;
+        background-color: #efefef;
+        width: 100%;
+      }
+      #centerline {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        border-top: 1px solid rgba(0,0,0,0.1);
+      }
+
+      #gray {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 50%;
+        background: #aaa;
+        left: 50%;
+      }
+
+      #times {
+        position: absolute;
+        top: 50%;
+        height: 100%;
+        width: 100%;
+      }
+      #current {
+        position: absolute;
+        bottom: 100%;
+        right: 50%;
+        padding: 4px;
+        color: white;
+        background: rgba(0,0,0,0.7);
+      }
+      #duration {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        padding: 4px;
+        color: #ccc;
+        background: rgba(0,0,0,0.7);
+      }
+      #error {
+        padding: 8px;
+        font-size: 0.8em;
+        font-style: italic;
+      }
+
+    </style>
+
+    <div id="gray"></div>
+    <div id="container">
+      <div class="blocker"></div>
+      <div id="waveform">
+        <div id="centerline"></div>
+        <div class="blocker right"></div>
+      </div>
+    </div>
+    <div id="times">
+      <div id="error" hidden="{{track.streamable}}">This track is<br>not streamable.</div>
+      <div id="current">{{_toTime(value)}}</div>
+      <div id="duration">{{_toTime(duration)}}</div>
+    </div>
+
+    <audio id="audio" src="{{_streamUrl(track, config)}}" current-time="{{value::timeupdate}}" on-play="_updatePlaying" on-pause="_updatePlaying" autoplay>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'sc-player',
+      properties: {
+        track: {
+          observer: '_trackChanged'
+        },
+        value: {
+          value: 0,
+          notify: true
+        },
+        duration: {
+          value: 0
+        },
+        playing: {
+          notify: true
+        }
+      },
+      observers: [
+        '_valueChanged(value, track)'
+      ],
+      listeners: {
+        track: '_tracking'
+      },
+      _streamUrl: function(track, config) {
+        return track.streamable ? track.stream_url + '?client_id=' + config.clientId : '';
+      },
+      _trackChanged: function(track) {
+        this.duration = track.duration / 1000;
+        this.$.waveform.style.backgroundColor = 'transparent';
+        this.$.waveform.style.backgroundImage = 'url(' + track.waveform_url + ')';
+        this.width = Math.round(this.duration * 10);
+        this.$.waveform.style.width = this.width + 'px';
+        this.value = 0;
+      },
+      _tracking: function(e) {
+        if (this.track.streamable) {
+          if (e.detail.state == 'start') {
+            this.startPaused = this.$.audio.paused;
+            this.pause();
+            this.startValue = this.value;
+            this.$.container.classList.add('tracking');
+          } else if (e.detail.state == 'end') {
+            this.$.container.classList.remove('tracking');
+            if (!this.startPaused) {
+              this.play();
+            }
+          }
+          var value = this.startValue;
+          value += (this.duration * -e.detail.dx / this.width);
+          value = Math.max(Math.min(value, this.duration), 0);
+          this.value = value;
+        }
+      },
+      _valueChanged: function(value, track) {
+        var offset = '-' + Math.round(this.width * value / this.duration);
+        this.translate3d(offset + 'px', '0px', '0px', this.$.container);
+      },
+      _toTime: function(time) {
+        var min = Math.floor(time / 60);
+        var sec = Math.floor(time % 60);
+        sec = sec < 10 ? '0' + sec : sec;
+        return min + ':' + sec;
+      },
+      _updatePlaying: function() {
+        this.playing = !this.$.audio.paused;
+      },
+      play: function() {
+        this.$.audio.play();
+      },
+      pause: function() {
+        this.$.audio.pause();
+      }
+    });
+  </script>
+
+</dom-module>

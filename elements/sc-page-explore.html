@@ -1,0 +1,107 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+
+<link rel="import" href="sc-item-track.html">
+
+<dom-module id="sc-page-explore">
+
+  <template strip-whitespace>
+
+    <style>
+      :host {
+        display: block;
+        background: #eee;
+      }
+      .genre {
+        padding-left: 8px;
+        padding-top: 16px;
+        font-size: 20px;
+        color: #777;
+      }
+      .list {
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+        @apply(--layout-center-justified);
+      }
+      .item {
+        width: 100%;
+        height: 300px;
+        margin-bottom: 8px;
+        min-width: 360px;
+        box-sizing: border-box;
+      }
+      .spacer {
+        height: auto;
+      }
+      @media all and (min-width: 600px) {
+        :host {
+          background: white;
+        }
+        .item {
+          width: 30%;
+          margin: 8px;
+        }
+        .spacer {
+          margin: 0 8px;
+        }
+        .genre {
+          padding-left: 0;
+        }
+      }
+    </style>
+
+    <template is="dom-repeat" items="{{genres}}" as="genre">
+      <iron-ajax url="http://api.soundcloud.com/tracks?limit=9&genres={{genre.name}}&client_id={{config.clientId}}"
+           last-response="{{genre.tracks}}" loading="{{genre.loading}}" auto></iron-ajax>
+      <paper-spinner hidden="{{!genre.loading}}" active="{{genre.loading}}"></paper-spinner>
+      <div class="list">
+        <div class="item spacer genre">{{genre.name}}</div>
+        <div class="item spacer"></div>
+        <div class="item spacer"></div>
+      </div>
+      <div class="list">
+        <template is="dom-repeat" items="{{genre.tracks}}" as="track">
+          <sc-item-track class="item" track="{{track}}"></sc-item-track>
+        </template>
+        <div class="item spacer"></div>
+        <div class="item spacer"></div>
+        <div class="item spacer"></div>
+      </div>
+    </template>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'sc-page-explore',
+      properties: {
+        genres: {
+          value: function() {
+            return [
+              {name: 'Pop'},
+              {name: 'Rock'},
+              {name: 'Hip Hop'},
+              {name: 'Electronic'},
+              {name: 'Alternative'},
+              {name: 'Country'},
+              {name: 'Jazz'}
+            ];
+          }
+        }
+      }
+    });
+  </script>
+
+</dom-module>
