@@ -65,7 +65,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template is="dom-repeat" items="{{genres}}" as="genre">
       <iron-ajax url="http://api.soundcloud.com/tracks?limit=9&genres={{genre.name}}&client_id={{config.clientId}}"
            last-response="{{genre.tracks}}" loading="{{genre.loading}}" auto></iron-ajax>
-      <paper-spinner hidden="{{!genre.loading}}" active="{{genre.loading}}"></paper-spinner>
+      <!-- <paper-spinner hidden="{{!genre.loading}}" active="{{genre.loading}}"></paper-spinner> -->
       <div class="list">
         <div class="item spacer genre">{{genre.name}}</div>
         <div class="item spacer"></div>
