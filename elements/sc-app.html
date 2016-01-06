@@ -51,11 +51,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         max-width: 120px;
         padding: 0;
       }
-      paper-tab:nth-of-type(0),
-      paper-tab:nth-of-type(1) {
-        --paper-tab {
-          background-color: #ff3d00;
-        }
+      paper-tab.solid {
+        background-color: #ff3d00;
       }
       [hidden] {
         display: none !important;
@@ -109,8 +106,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-menu selected="[[page]]" attr-for-selected="name">
           <a name="explore" href="#/explore"><paper-item>Explore</paper-item></a>
           <a name="search" href="#/search/{{searchRoute}}"><paper-item>Search</paper-item></a>
-          <a name="stream" href="#/stream" hide$="{{!user}}"><paper-item>My Stream</paper-item></a>
-          <a name="playlists" href="#/playlists" hide$="{{!user}}"><paper-item>My Playlists</paper-item></a>
+          <a name="stream" href="#/stream" hidden$="{{!user}}"><paper-item>My Stream</paper-item></a>
+          <a name="playlists" href="#/playlists" hidden$="{{!user}}"><paper-item>My Playlists</paper-item></a>
           <a name="playing" href="#/playing/{{trackid}}"><paper-item hidden="{{!trackid}}">Now Playing</paper-item></a>
           <hr>
           <a name="user" href="#/user"><paper-item>[[_loginText(user)]]</paper-item></a>
@@ -131,8 +128,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <app-toolbar class="tabs-bar" hidden$="[[!wideLayout]]">
             <!-- Nav on desktop: tabs -->
             <paper-tabs selected="[[page]]" attr-for-selected="name" bottom-item>
-              <paper-tab name="explore"><a href="#/explore">Explore</a></paper-tab>
-              <paper-tab name="search"><a href="#/search/{{searchRoute}}">Search</a></paper-tab>
+              <paper-tab class="solid" name="explore"><a href="#/explore">Explore</a></paper-tab>
+              <paper-tab class="solid" name="search"><a href="#/search/{{searchRoute}}">Search</a></paper-tab>
               <paper-tab name="stream" hide$="{{!user}}"><a href="#/stream">My Stream</a></paper-tab>
               <paper-tab name="playlists" hide$="{{!user}}"><a href="#/playlists">My Playlists</a></paper-tab>
               <paper-tab name="playing" hide$="{{!trackid}}"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
