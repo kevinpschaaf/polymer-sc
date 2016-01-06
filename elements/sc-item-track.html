@@ -55,7 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .fit {
         @apply(--layout-fit);
       }
-      paper-button[active] {
+      paper-button.highlight {
         color: #ff3d00;
       }
       .reposts {
@@ -98,11 +98,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-icon icon="{{_playIcon(track.streamable)}}"></iron-icon>
         {{_formatNumber(track.playback_count)}}
       </div>
-      <paper-button raised toggles>
+      <paper-button raised="{{user}}">
         <iron-icon icon="sync"></iron-icon>
         {{_formatNumber(track.reposts_count)}}
       </paper-button>
-      <paper-button raised toggles>
+      <paper-button raised="{{user}}" class$="[[_activeClass(track.user_favorite)]]" on-tap="_toggleFavorite">
         <iron-icon icon="favorite"></iron-icon>
         {{_formatNumber(track.likes_count)}}
       </paper-button>
@@ -128,6 +128,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       _playIcon: function(streamable) {
         return streamable ? 'play-arrow' : 'not-interested';
+      },
+      _loggedIn: function(track) {
+        return track.user_favorite !== undefined;
+      },
+      _activeClass: function(active) {
+        return active ? 'highlight' : '';
+      },
+      _toggleFavorite: function() {
+        if (this.user) {
+          if (this.track.user_favorite) {
+            SC.delete('/me/favorites/' + this.track.id);
+            this.set('track.user_favorite', false);
+          } else {
+            SC.put('/me/favorites/' + this.track.id);
+            this.set('track.user_favorite', true);
+          }
+        }
       }
     });
   </script>

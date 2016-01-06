@@ -11,7 +11,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+
 <link rel="import" href="sc-icons.html">
+<link rel="import" href="sc-item-track.html">
 
 <dom-module id="sc-page-search">
 
@@ -38,9 +40,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         height: 400px;
         margin-bottom: 8px;
         box-sizing: border-box;
+        border-bottom: 1px solid #ccc;
       }
       .spacer {
         height: auto;
+        border-bottom: none;
+        margin-bottom: 0;
       }
       @media all and (min-width: 600px) {
         .item {
@@ -53,7 +58,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <carbon-route route="[[route]]" matches=":query" query="{{query}}"></carbon-route>
 
-    <iron-ajax id="queryAjax" url="http://api.soundcloud.com/tracks?q={{uri(query)}}&limit=20&client_id={{config.clientId}}" debounce-duration="300" last-response="{{tracks}}" auto="{{bool(query)}}"></iron-ajax>
+    <iron-ajax id="queryAjax" url="http://api.soundcloud.com/tracks?q={{uri(query)}}&limit=20&client_id={{config.clientId}}&oauth_token={{user.oauthToken}}" debounce-duration="300" last-response="{{tracks}}" auto="{{bool(query)}}"></iron-ajax>
 
     <paper-input id="input" class="short" no-label-float placeholder="Search" value="{{query}}">
       <iron-icon icon="search" prefix></iron-icon>
@@ -62,8 +67,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </paper-input>
 
     <div class="list">
-      <template is="dom-repeat" items="{{tracks}}" as="track">
-        <sc-item-track class="item" track="{{track}}"></sc-item-track>
+      <template is="dom-repeat" items="{{tracks}}" as="track" initial-count="6">
+        <sc-item-track class="item" track="{{track}}" user="{{user}}"></sc-item-track>
       </template>
       <div class="item spacer"></div>
       <div class="item spacer"></div>

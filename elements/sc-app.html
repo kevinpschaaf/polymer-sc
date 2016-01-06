@@ -24,10 +24,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="lazy-pages.html">
 <link rel="import" href="sc-page-explore.html">
 <link rel="import" href="sc-page-search.html">
-<link rel="import" href="sc-page-collection.html">
 <link rel="import" href="sc-page-stream.html">
+<link rel="import" href="sc-page-playlists.html">
 <link rel="import" href="sc-page-playing.html">
-<link rel="import" href="sc-page-user.html">
 <link rel="import" href="sc-icons.html">
 
 <dom-module id="sc-app">
@@ -49,7 +48,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       paper-tab {
         --paper-tab-ink: #aaa;
         text-transform: uppercase;
-        max-width: 100px;
+        max-width: 120px;
+        padding: 0;
       }
       paper-tab:nth-of-type(0),
       paper-tab:nth-of-type(1) {
@@ -85,6 +85,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .iron-selected paper-item {
         font-weight: bold;
       }
+      [hide] {
+        visibility: hidden;
+      }
     </style>
 
     <carbon-router route="{{route}}"></carbon-router>
@@ -106,8 +109,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-menu selected="[[page]]" attr-for-selected="name">
           <a name="explore" href="#/explore"><paper-item>Explore</paper-item></a>
           <a name="search" href="#/search/{{searchRoute}}"><paper-item>Search</paper-item></a>
-          <a name="collection" href="#/collection"><paper-item>My Collection</paper-item></a>
-          <a name="stream" href="#/stream"><paper-item>My Stream</paper-item></a>
+          <a name="stream" href="#/stream" hide$="{{!user}}"><paper-item>My Stream</paper-item></a>
+          <a name="playlists" href="#/playlists" hide$="{{!user}}"><paper-item>My Playlists</paper-item></a>
           <a name="playing" href="#/playing/{{trackid}}"><paper-item hidden="{{!trackid}}">Now Playing</paper-item></a>
           <hr>
           <a name="user" href="#/user"><paper-item>[[_loginText(user)]]</paper-item></a>
@@ -130,11 +133,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-tabs selected="[[page]]" attr-for-selected="name" bottom-item>
               <paper-tab name="explore"><a href="#/explore">Explore</a></paper-tab>
               <paper-tab name="search"><a href="#/search/{{searchRoute}}">Search</a></paper-tab>
-              <paper-tab name="collection"><a href="#/collection">My Collection</a></paper-tab>
-              <paper-tab name="stream"><a href="#/stream">My Stream</a></paper-tab>
-              <paper-tab name="playing" disabled="{{!trackid}}"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
+              <paper-tab name="stream" hide$="{{!user}}"><a href="#/stream">My Stream</a></paper-tab>
+              <paper-tab name="playlists" hide$="{{!user}}"><a href="#/playlists">My Playlists</a></paper-tab>
+              <paper-tab name="playing" hide$="{{!trackid}}"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
               <div class="spacer"></div>
-              <paper-icon-button icon="{{_loginIcon(user)}}" on-tap="_gotoUser"></paper-icon-button>
+              <paper-icon-button icon="{{_loginIcon(user)}}" on-tap="_toggleLogin"></paper-icon-button>
             </paper-tabs>
           </app-toolbar>
 
@@ -143,16 +146,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <lazy-pages selected="[[page]]">
         <template is="dom-if" name="explore">
-          <sc-page-explore config="[[config]]"></sc-page-explore>
+          <sc-page-explore config="[[config]]" user="{{user}}"></sc-page-explore>
         </template>
         <template is="dom-if" name="search">
-          <sc-page-search route="{{searchRoute}}" config="[[config]]"></sc-page-search>
-        </template>
-        <template is="dom-if" name="collection">
-          <sc-page-collection config="[[config]]"></sc-page-collection>
+          <sc-page-search route="{{searchRoute}}" config="[[config]]" user="{{user}}"></sc-page-search>
         </template>
         <template is="dom-if" name="stream">
-          <sc-page-stream config="[[config]]"></sc-page-stream>
+          <sc-page-stream config="[[config]]" user="{{user}}"></sc-page-stream>
+        </template>
+        <template is="dom-if" name="playlists">
+          <sc-page-playlists config="[[config]]" user="{{user}}"></sc-page-playlists>
         </template>
         <template is="dom-if" name="playing">
           <sc-page-playing config="[[config]]" track="[[currentTrack]]"></sc-page-playing>
@@ -194,7 +197,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         document.head.appendChild(script);
       },
       _sdkLoaded: function() {
-        var token = localStorage.getItem('polymer-sc-oauth');
+        var token = this.oauthToken = localStorage.getItem('polymer-sc-oauth');
         this._initSdk(token);
         if (token) {
           this._getUser();
@@ -211,12 +214,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _getUser: function() {
         var self = this;
         SC.get('/me').then(function(me) {
+          me.oauthToken = self.oauthToken;
           self.user = me;
         });
+      },
+      _toggleLogin: function() {
+        if (this.user) {
+          this._doLogout();
+        } else {
+          this._doLogin();
+        }
       },
       _doLogin: function() {
         var self = this;
         SC.connect().then(function(info) {
+          this.oauthToken = info.oauth_token;
           localStorage.setItem('polymer-sc-oauth', info.oauth_token);
           self._getUser();
         });
@@ -232,9 +244,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       _loginText: function(user) {
         return user ? 'Logout' : 'Login';
-      },
-      _gotoUser: function() {
-        window.location.hash = '/user';
       }
     });
   </script>

@@ -33,6 +33,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--layout-wrap);
         @apply(--layout-center-justified);
       }
+      .list.min {
+        min-height: 1000px;
+      }
       .item {
         width: 100%;
         height: 350px;
@@ -67,17 +70,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <template is="dom-repeat" items="{{genres}}" as="genre">
-      <iron-ajax url="http://api.soundcloud.com/tracks?limit=9&genres={{genre.name}}&client_id={{config.clientId}}"
+    <template is="dom-repeat" items="{{genres}}" as="genre" initial-count="1">
+      <iron-ajax url="http://api.soundcloud.com/tracks?limit=9&genres={{genre.name}}&client_id={{config.clientId}}&oauth_token={{user.oauthToken}}"
            last-response="{{genre.tracks}}" loading="{{genre.loading}}" auto></iron-ajax>
       <div class="list">
-        <div class="item spacer genre" hidden="{{genre.loading}}">{{genre.name}}</div>
+        <div class="item spacer genre" hidden="{{!genre.tracks.length}}">{{genre.name}}</div>
         <div class="item spacer"></div>
         <div class="item spacer"></div>
       </div>
-      <div class="list">
-        <template is="dom-repeat" items="{{genre.tracks}}" as="track">
-          <sc-item-track class="item" track="{{track}}"></sc-item-track>
+      <div class="list min">
+        <template is="dom-repeat" items="{{genre.tracks}}" as="track" initial-count="6">
+          <sc-item-track class="item" track="{{track}}" user="{{user}}"></sc-item-track>
         </template>
         <div class="item spacer"></div>
         <div class="item spacer"></div>

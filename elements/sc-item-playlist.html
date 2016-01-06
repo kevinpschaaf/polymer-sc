@@ -1,0 +1,62 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="sc-icons.html">
+
+<dom-module id="sc-item-playlist">
+
+  <template strip-whitespace>
+
+    <style>
+      :host {
+        display: block;
+        padding: 8px;
+        background: white;
+        box-sizing: border-box;
+        @apply(--layout-horizontal);
+      }
+      .title {
+        @apply(--layout-flex);
+        padding: 8px;
+      }
+      .count {
+        padding: 8px;
+      }
+      .artwork {
+        height: 32px;
+        width: 32px;
+      }
+    </style>
+
+    <img class="artwork" src="{{_artworkUrl(playlist)}}">
+    <div class="title">{{playlist.title}}</div>
+    <div class="count">{{playlist.tracks.length}} tracks</div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'sc-item-playlist',
+      properties: {
+      },
+      _artworkUrl: function(playlist) {
+        return playlist.artwork_url ||
+          (playlist.tracks && playlist.tracks[0] && playlist.tracks[0].artwork_url);
+      }
+    });
+  </script>
+
+</dom-module>

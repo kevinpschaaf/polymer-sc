@@ -9,41 +9,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
-<dom-module id="sc-page-user">
+<link rel="import" href="sc-item-playlist.html">
+
+<dom-module id="sc-page-playlists">
 
   <template>
 
     <style>
       :host {
         display: block;
-        padding: 16px;
+        margin-top: 16px;
+      }
+      .list {
+        @apply(--layout-vertical);
+        @apply(--layout-center);
+      }
+      sc-item-playlist {
+        width: 500px;
+        max-width: 100%;
+        border-bottom: 1px solid #ccc;
       }
     </style>
 
     <template is="dom-if" if="{{user}}">
-      Logged in: {{user.username}}<br><br>
-      <paper-button on-tap="_logout" raised>Logout</paper-button>
-    </template>
 
-    <template is="dom-if" if="{{!user}}">
-      Logged out.<br><br>
-      <paper-button on-tap="_login" raised>Login</paper-button>
+      <iron-ajax url="http://api.soundcloud.com/me/playlists?oauth_token={{user.oauthToken}}&client_id={{config.clientId}}" last-response="{{playlists}}" auto="{{user.oauthToken}}"></iron-ajax>
+
+      <div class="list">
+        <template is="dom-repeat" items="{{playlists}}" as="playlist">
+          <sc-item-playlist playlist="{{playlist}}"></sc-item-playlist>
+        </template>
+      </div>
+
     </template>
 
   </template>
 
   <script>
     Polymer({
-      is: 'sc-page-user',
+      is: 'sc-page-playlists',
       properties: {
-      },
-      _logout: function() {
-        this.fire('request-logout');
-      },
-      _login: function() {
-        this.fire('request-login');
       }
     });
   </script>

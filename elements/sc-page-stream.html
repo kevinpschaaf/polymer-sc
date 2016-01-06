@@ -9,19 +9,67 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="sc-icons.html">
+<link rel="import" href="sc-item-track.html">
 
 <dom-module id="sc-page-stream">
 
-  <template>
+  <template strip-whitespace>
 
     <style>
       :host {
         display: block;
-        padding: 16px;
       }
+      paper-input {
+        padding: 8px;
+        margin-bottom: 8px;
+        background: white;
+        border: 1px solid #eee;
+        --paper-input-container-focus-color: #ff3d00;
+      }
+      .list {
+        margin-top: 16px;
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+        @apply(--layout-center-justified);
+      }
+      .item {
+        width: 100%;
+        height: 400px;
+        margin-bottom: 8px;
+        box-sizing: border-box;
+        border-bottom: 1px solid #ccc;
+      }
+      .spacer {
+        height: auto;
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+      @media all and (min-width: 600px) {
+        .item {
+          width: 360px;
+          margin: 8px;
+        }
+      }
+
     </style>
 
-    Page - Stream
+    <template is="dom-if" if="{{user}}">
+
+      <iron-ajax url="http://api.soundcloud.com/me/activities?oauth_token={{user.oauthToken}}&client_id={{config.clientId}}" last-response="{{items}}" auto="{{user.oauthToken}}"></iron-ajax>
+
+      <div class="list">
+        <template is="dom-repeat" items="{{tracks}}" as="track">
+          <sc-item-track class="item" track="{{track}}" user="{{user}}"></sc-item-track>
+        </template>
+        <div class="item spacer"></div>
+        <div class="item spacer"></div>
+        <div class="item spacer"></div>
+      </div>
+    </template>
 
   </template>
 
@@ -29,6 +77,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'sc-page-stream',
       properties: {
+        tracks: {
+          computed: '_computeTracks(items.*)'
+        }
+      },
+      _computeTracks: function(info) {
+        var items = info.base.collection;
+        var tracks = [];
+        for (var i=0; i<items.length; i++) {
+          var item = items[i];
+          if (item.type == 'track') {
+            tracks.push(item.origin);
+          }
+        }
+        return tracks;
       }
     });
   </script>
