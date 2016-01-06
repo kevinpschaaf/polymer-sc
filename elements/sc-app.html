@@ -236,8 +236,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _doLogin: function() {
         var self = this;
         SC.connect().then(function(info) {
-          this.oauthToken = info.oauth_token;
           localStorage.setItem('polymer-sc-oauth', info.oauth_token);
+          self.oauthToken = info.oauth_token;
           self._getUser();
         });
       },
