@@ -2300,7 +2300,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         min-height: 100px;
         padding: 8px;
         background: white;
-        border-bottom: 1px solid #ccc;
         @apply(--layout-vertical);
       }
       .avatar {
@@ -2330,7 +2329,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .fit {
         @apply(--layout-fit);
       }
-      paper-button[active] {
+      paper-button.highlight {
         color: #ff3d00;
       }
       .reposts {
@@ -2373,11 +2372,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-icon icon="{{_playIcon(track.streamable)}}"></iron-icon>
         {{_formatNumber(track.playback_count)}}
       </div>
-      <paper-button raised="" toggles="">
+      <paper-button raised="{{user}}">
         <iron-icon icon="sync"></iron-icon>
         {{_formatNumber(track.reposts_count)}}
       </paper-button>
-      <paper-button raised="" toggles="">
+      <paper-button raised="{{user}}" class$="[[_activeClass(track.user_favorite)]]" on-tap="_toggleFavorite">
         <iron-icon icon="favorite"></iron-icon>
         {{_formatNumber(track.likes_count)}}
       </paper-button>
@@ -2393,7 +2392,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
-        background: #eee;
       }
       .genre {
         padding: 16px 8px 8px 8px;
@@ -2405,32 +2403,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--layout-wrap);
         @apply(--layout-center-justified);
       }
+      .list.min {
+        min-height: 1000px;
+      }
       .item {
         width: 100%;
         height: 350px;
         margin-bottom: 8px;
-        min-width: 360px;
         box-sizing: border-box;
+        border-bottom: 1px solid #ccc;
       }
       .spacer {
         height: auto;
         margin: 0;
+        border-bottom: none;
       }
       .hide {
         display: none;
       }
       @media all and (min-width: 600px) {
-        :host {
-          background: white;
-        }
         .item {
-          width: 300px;
+          width: 360px;
           height: 400px;
           margin: 8px;
+          border-bottom: none;
         }
         .spacer {
           margin: 0;
           height: auto;
+          border-bottom: none;
         }
         .genre {
           padding-right: 0;
@@ -2439,16 +2440,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <template is="dom-repeat" items="{{genres}}" as="genre">
-      <iron-ajax url="http://api.soundcloud.com/tracks?limit=9&amp;genres={{genre.name}}&amp;client_id={{config.clientId}}" last-response="{{genre.tracks}}" loading="{{genre.loading}}" auto=""></iron-ajax>
+    <template is="dom-repeat" items="{{genres}}" as="genre" initial-count="1">
+      <iron-ajax url="http://api.soundcloud.com/tracks?limit=9&amp;genres={{genre.name}}&amp;client_id={{config.clientId}}&amp;oauth_token={{user.oauthToken}}" last-response="{{genre.tracks}}" loading="{{genre.loading}}" auto=""></iron-ajax>
       <div class="list">
-        <div class="item spacer genre" hidden="{{genre.loading}}">{{genre.name}}</div>
+        <div class="item spacer genre" hidden="{{!genre.tracks.length}}">{{genre.name}}</div>
         <div class="item spacer"></div>
         <div class="item spacer"></div>
       </div>
-      <div class="list">
-        <template is="dom-repeat" items="{{genre.tracks}}" as="track">
-          <sc-item-track class="item" track="{{track}}"></sc-item-track>
+      <div class="list min">
+        <template is="dom-repeat" items="{{genre.tracks}}" as="track" initial-count="6">
+          <sc-item-track class="item" track="{{track}}" user="{{user}}"></sc-item-track>
         </template>
         <div class="item spacer"></div>
         <div class="item spacer"></div>
@@ -2779,6 +2780,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template strip-whitespace="">
 
     <style>
+      :host {
+        display: block;
+      }
       paper-input {
         padding: 8px;
         margin-bottom: 8px;
@@ -2795,15 +2799,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 100%;
         height: 400px;
         margin-bottom: 8px;
-        min-width: 360px;
         box-sizing: border-box;
+        border-bottom: 1px solid #ccc;
       }
       .spacer {
         height: auto;
+        border-bottom: none;
+        margin-bottom: 0;
       }
       @media all and (min-width: 600px) {
         .item {
-          width: 300px;
+          width: 360px;
           margin: 8px;
         }
       }
@@ -2812,7 +2818,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <carbon-route route="[[route]]" matches=":query" query="{{query}}"></carbon-route>
 
-    <iron-ajax id="queryAjax" url="http://api.soundcloud.com/tracks?q={{uri(query)}}&amp;client_id={{config.clientId}}" debounce-duration="300" last-response="{{tracks}}" auto="{{bool(query)}}"></iron-ajax>
+    <iron-ajax id="queryAjax" url="http://api.soundcloud.com/tracks?q={{uri(query)}}&amp;limit=20&amp;client_id={{config.clientId}}&amp;oauth_token={{user.oauthToken}}" debounce-duration="300" last-response="{{tracks}}" auto="{{bool(query)}}"></iron-ajax>
 
     <paper-input id="input" class="short" no-label-float="" placeholder="Search" value="{{query}}">
       <iron-icon icon="search" prefix=""></iron-icon>
@@ -2821,8 +2827,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </paper-input>
 
     <div class="list">
-      <template is="dom-repeat" items="{{tracks}}" as="track">
-        <sc-item-track class="item" track="{{track}}"></sc-item-track>
+      <template is="dom-repeat" items="{{tracks}}" as="track" initial-count="6">
+        <sc-item-track class="item" track="{{track}}" user="{{user}}"></sc-item-track>
       </template>
       <div class="item spacer"></div>
       <div class="item spacer"></div>
@@ -2832,34 +2838,128 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   </dom-module>
-<dom-module id="sc-page-collection" assetpath="elements/">
+<dom-module id="sc-page-stream" assetpath="elements/">
 
-  <template>
+  <template strip-whitespace="">
 
     <style>
       :host {
         display: block;
-        padding: 16px;
       }
+      paper-input {
+        padding: 8px;
+        margin-bottom: 8px;
+        background: white;
+        border: 1px solid #eee;
+        --paper-input-container-focus-color: #ff3d00;
+      }
+      .list {
+        margin-top: 16px;
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+        @apply(--layout-center-justified);
+      }
+      .item {
+        width: 100%;
+        height: 400px;
+        margin-bottom: 8px;
+        box-sizing: border-box;
+        border-bottom: 1px solid #ccc;
+      }
+      .spacer {
+        height: auto;
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+      @media all and (min-width: 600px) {
+        .item {
+          width: 360px;
+          margin: 8px;
+        }
+      }
+
     </style>
 
-    Page - Collection
+    <template is="dom-if" if="{{user}}">
+
+      <iron-ajax url="http://api.soundcloud.com/me/activities?oauth_token={{user.oauthToken}}&amp;client_id={{config.clientId}}" last-response="{{items}}" auto="{{user.oauthToken}}"></iron-ajax>
+
+      <div class="list">
+        <template is="dom-repeat" items="{{tracks}}" as="track">
+          <sc-item-track class="item" track="{{track}}" user="{{user}}"></sc-item-track>
+        </template>
+        <div class="item spacer"></div>
+        <div class="item spacer"></div>
+        <div class="item spacer"></div>
+      </div>
+    </template>
 
   </template>
 
   </dom-module>
-<dom-module id="sc-page-stream" assetpath="elements/">
+<dom-module id="sc-item-playlist" assetpath="elements/">
+
+  <template strip-whitespace="">
+
+    <style>
+      :host {
+        display: block;
+        padding: 8px;
+        background: white;
+        box-sizing: border-box;
+        @apply(--layout-horizontal);
+      }
+      .title {
+        @apply(--layout-flex);
+        padding: 8px;
+      }
+      .count {
+        padding: 8px;
+      }
+      .artwork {
+        height: 32px;
+        width: 32px;
+      }
+    </style>
+
+    <img class="artwork" src="{{_artworkUrl(playlist)}}">
+    <div class="title">{{playlist.title}}</div>
+    <div class="count">{{playlist.tracks.length}} tracks</div>
+
+  </template>
+
+  </dom-module>
+<dom-module id="sc-page-playlists" assetpath="elements/">
 
   <template>
 
     <style>
       :host {
         display: block;
-        padding: 16px;
+        margin-top: 16px;
+      }
+      .list {
+        @apply(--layout-vertical);
+        @apply(--layout-center);
+      }
+      sc-item-playlist {
+        width: 500px;
+        max-width: 100%;
+        border-bottom: 1px solid #ccc;
       }
     </style>
 
-    Page - Stream
+    <template is="dom-if" if="{{user}}">
+
+      <iron-ajax url="http://api.soundcloud.com/me/playlists?oauth_token={{user.oauthToken}}&amp;client_id={{config.clientId}}" last-response="{{playlists}}" auto="{{user.oauthToken}}"></iron-ajax>
+
+      <div class="list">
+        <template is="dom-repeat" items="{{playlists}}" as="playlist">
+          <sc-item-playlist playlist="{{playlist}}"></sc-item-playlist>
+        </template>
+      </div>
+
+    </template>
 
   </template>
 
@@ -2964,7 +3064,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div id="duration">{{_toTime(duration)}}</div>
     </div>
 
-    <audio id="audio" src="{{_streamUrl(track, config)}}" current-time="{{value::timeupdate}}" on-play="_updatePlaying" on-pause="_updatePlaying" autoplay="">
+    <audio id="audio" src="{{_streamUrl(track, config)}}" on-timeupdate="_updatevalue" on-play="_updatePlaying" on-pause="_updatePlaying" autoplay="">
 
   </audio></template>
 
@@ -2981,11 +3081,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         height: 300px;
         width: 300px;
         min-width: 100%;
+        overflow: hidden;
       }
       .artwork {
         @apply(--layout-fit);
         -webkit-filter: blur(10px) brightness(50%);
         filter: blur(10px) brightness(50%);
+        margin: -15px -15px -15px -15px;
       }
       .playing > .artwork {
         -webkit-filter: none;
@@ -3034,30 +3136,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   </dom-module>
-<dom-module id="sc-page-user" assetpath="elements/">
-
-  <template>
-
-    <style>
-      :host {
-        display: block;
-        padding: 16px;
-      }
-    </style>
-
-    <template is="dom-if" if="{{user}}">
-      Logged in: {{user.username}}<br><br>
-      <paper-button on-tap="_logout" raised="">Logout</paper-button>
-    </template>
-
-    <template is="dom-if" if="{{!user}}">
-      Logged out.<br><br>
-      <paper-button on-tap="_login" raised="">Login</paper-button>
-    </template>
-
-  </template>
-
-  </dom-module>
 <dom-module id="sc-app" assetpath="elements/">
 
   <template strip-whitespace="">
@@ -3077,13 +3155,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       paper-tab {
         --paper-tab-ink: #aaa;
         text-transform: uppercase;
-        max-width: 100px;
+        max-width: 120px;
+        padding: 0;
       }
-      paper-tab:nth-of-type(0),
-      paper-tab:nth-of-type(1) {
-        --paper-tab {
-          background-color: #ff3d00;
-        }
+      paper-tab.solid {
+        background-color: #ff3d00;
       }
       [hidden] {
         display: none !important;
@@ -3093,6 +3169,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: inherit;
       }
       paper-tab a {
+        @apply(--layout-fit);
         @apply(--layout-horizontal);
         @apply(--layout-center-center);
       }
@@ -3108,6 +3185,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       .spacer {
         @apply(--layout-flex);
+      }
+      .iron-selected paper-item {
+        font-weight: bold;
+      }
+      [hide] {
+        visibility: hidden;
       }
     </style>
 
@@ -3128,13 +3211,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         
         <paper-menu selected="[[page]]" attr-for-selected="name">
-          <paper-item name="explore"><a href="#/explore"></a>Explore</paper-item>
-          <paper-item name="search"><a href="#/search/{{searchRoute}}"></a>Search</paper-item>
-          <paper-item name="collection"><a href="#/collection"></a>My Collection</paper-item>
-          <paper-item name="stream"><a href="#/stream"></a>My Stream</paper-item>
-          <paper-item name="playing" hidden="{{!trackid}}"><a href="#/playing/{{trackid}}"></a>Now Playing</paper-item>
+          <a name="explore" href="#/explore"><paper-item>Explore</paper-item></a>
+          <a name="search" href="#/search/{{searchRoute}}"><paper-item>Search</paper-item></a>
+          <a name="stream" href="#/stream" hidden$="{{!user}}"><paper-item>My Stream</paper-item></a>
+          <a name="playlists" href="#/playlists" hidden$="{{!user}}"><paper-item>My Playlists</paper-item></a>
+          <a name="playing" href="#/playing/{{trackid}}"><paper-item hidden="{{!trackid}}">Now Playing</paper-item></a>
           <hr>
-          <paper-item><a href="#/user"></a>[[_loginText(user)]]</paper-item>
+          <a name="user" href="#/user"><paper-item>[[_loginText(user)]]</paper-item></a>
         </paper-menu>
 
       </div>
@@ -3152,13 +3235,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <app-toolbar class="tabs-bar" hidden$="[[!wideLayout]]">
             
             <paper-tabs selected="[[page]]" attr-for-selected="name" bottom-item="">
-              <paper-tab name="explore"><a href="#/explore">Explore</a></paper-tab>
-              <paper-tab name="search"><a href="#/search/{{searchRoute}}">Search</a></paper-tab>
-              <paper-tab name="collection"><a href="#/collection">My Collection</a></paper-tab>
-              <paper-tab name="stream"><a href="#/stream">My Stream</a></paper-tab>
-              <paper-tab name="playing" disabled="{{!trackid}}"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
+              <paper-tab class="solid" name="explore"><a href="#/explore">Explore</a></paper-tab>
+              <paper-tab class="solid" name="search"><a href="#/search/{{searchRoute}}">Search</a></paper-tab>
+              <paper-tab name="stream" hide$="{{!user}}"><a href="#/stream">My Stream</a></paper-tab>
+              <paper-tab name="playlists" hide$="{{!user}}"><a href="#/playlists">My Playlists</a></paper-tab>
+              <paper-tab name="playing" hide$="{{!trackid}}"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
               <div class="spacer"></div>
-              <paper-icon-button icon="{{_loginIcon(user)}}" on-tap="_gotoUser"></paper-icon-button>
+              <paper-icon-button icon="{{_loginIcon(user)}}" on-tap="_toggleLogin"></paper-icon-button>
             </paper-tabs>
           </app-toolbar>
 
@@ -3167,16 +3250,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <lazy-pages selected="[[page]]">
         <template is="dom-if" name="explore">
-          <sc-page-explore config="[[config]]"></sc-page-explore>
+          <sc-page-explore config="[[config]]" user="{{user}}"></sc-page-explore>
         </template>
         <template is="dom-if" name="search">
-          <sc-page-search route="{{searchRoute}}" config="[[config]]"></sc-page-search>
-        </template>
-        <template is="dom-if" name="collection">
-          <sc-page-collection config="[[config]]"></sc-page-collection>
+          <sc-page-search route="{{searchRoute}}" config="[[config]]" user="{{user}}"></sc-page-search>
         </template>
         <template is="dom-if" name="stream">
-          <sc-page-stream config="[[config]]"></sc-page-stream>
+          <sc-page-stream config="[[config]]" user="{{user}}"></sc-page-stream>
+        </template>
+        <template is="dom-if" name="playlists">
+          <sc-page-playlists config="[[config]]" user="{{user}}"></sc-page-playlists>
         </template>
         <template is="dom-if" name="playing">
           <sc-page-playing config="[[config]]" track="[[currentTrack]]"></sc-page-playing>
