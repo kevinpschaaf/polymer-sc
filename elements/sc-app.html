@@ -180,6 +180,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
+    window.onerror = function(e) {
+      alert(e);
+    }
     Polymer({
       is: 'sc-app',
       properties: {
