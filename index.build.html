@@ -2289,6 +2289,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <g id="clear"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></g>
 <g id="person"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></g>
 <g id="person-outline"><path d="M12 5.9c1.16 0 2.1.94 2.1 2.1s-.94 2.1-2.1 2.1S9.9 9.16 9.9 8s.94-2.1 2.1-2.1m0 9c2.97 0 6.1 1.46 6.1 2.1v1.1H5.9V17c0-.64 3.13-2.1 6.1-2.1M12 4C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 9c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4z"></path></g>
+<g id="explore"><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"></path></g>
+<g id="library-books"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"></path></g>
+<g id="library-music"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 5h-3v5.5c0 1.38-1.12 2.5-2.5 2.5S10 13.88 10 12.5s1.12-2.5 2.5-2.5c.57 0 1.08.19 1.5.51V5h4v2zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6z"></path></g>
 </defs></svg>
 </iron-iconset-svg><dom-module id="sc-item-track" assetpath="elements/">
 
@@ -3176,6 +3179,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       paper-item a {
         @apply(--layout-fit);
       }
+      paper-item iron-icon {
+        margin-right: 16px;
+      }
       .logo {
         @apply(--layout-fit);
         background-image: url("resources/toolbar-logo.png");
@@ -3211,13 +3217,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         
         <paper-menu selected="[[page]]" attr-for-selected="name">
-          <a name="explore" href="#/explore"><paper-item>Explore</paper-item></a>
-          <a name="search" href="#/search/{{searchRoute}}"><paper-item>Search</paper-item></a>
-          <a name="stream" href="#/stream" hidden$="{{!user}}"><paper-item>My Stream</paper-item></a>
-          <a name="playlists" href="#/playlists" hidden$="{{!user}}"><paper-item>My Playlists</paper-item></a>
-          <a name="playing" href="#/playing/{{trackid}}"><paper-item hidden="{{!trackid}}">Now Playing</paper-item></a>
-          <hr>
-          <a name="user" href="#/user"><paper-item>[[_loginText(user)]]</paper-item></a>
+          <a name="explore" href="#/explore">
+            <paper-item><iron-icon icon="explore"></iron-icon>Explore</paper-item>
+          </a>
+          <a name="search" href="#/search/{{searchRoute}}">
+            <paper-item><iron-icon icon="search"></iron-icon>Search</paper-item>
+          </a>
+          <a name="stream" href="#/stream" hidden$="{{!user}}">
+            <paper-item><iron-icon icon="library-music"></iron-icon>My Stream</paper-item>
+          </a>
+          <a name="playlists" href="#/playlists" hidden$="{{!user}}">
+            <paper-item><iron-icon icon="library-books"></iron-icon>My Playlists</paper-item>
+          </a>
+          <a name="playing" href="#/playing/{{trackid}}">
+            <paper-item hidden="{{!trackid}}"><iron-icon icon="play-arrow"></iron-icon>Now Playing</paper-item>
+          </a>
         </paper-menu>
 
       </div>
@@ -3229,7 +3243,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <app-toolbar>
             <paper-icon-button class="menu-button" icon="menu" drawer-toggle="" hidden$="[[wideLayout]]"></paper-icon-button>
-            <div title="">Polymer SoundCloud</div>
+            <div title="" class="spacer">Polymer SoundCloud</div>
+            <paper-icon-button icon="{{_loginIcon(user)}}" on-tap="_toggleLogin"></paper-icon-button>
           </app-toolbar>
 
           <app-toolbar class="tabs-bar" hidden$="[[!wideLayout]]">
@@ -3240,8 +3255,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-tab name="stream" hide$="{{!user}}"><a href="#/stream">My Stream</a></paper-tab>
               <paper-tab name="playlists" hide$="{{!user}}"><a href="#/playlists">My Playlists</a></paper-tab>
               <paper-tab name="playing" hide$="{{!trackid}}"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
-              <div class="spacer"></div>
-              <paper-icon-button icon="{{_loginIcon(user)}}" on-tap="_toggleLogin"></paper-icon-button>
             </paper-tabs>
           </app-toolbar>
 
