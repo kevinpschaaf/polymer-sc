@@ -9,6 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <dom-module id="sc-page-user">
 
@@ -21,7 +22,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    Page - user
+    <template is="dom-if" if="{{user}}">
+      Logged in: {{user.username}}<br><br>
+      <paper-button on-tap="_logout" raised>Logout</paper-button>
+    </template>
+
+    <template is="dom-if" if="{{!user}}">
+      Logged out.<br><br>
+      <paper-button on-tap="_login" raised>Login</paper-button>
+    </template>
 
   </template>
 
@@ -29,6 +38,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'sc-page-user',
       properties: {
+      },
+      _logout: function() {
+        this.fire('request-logout');
+      },
+      _login: function() {
+        this.fire('request-login');
       }
     });
   </script>

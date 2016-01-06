@@ -84,7 +84,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <carbon-router route="{{route}}"></carbon-router>
-    <carbon-route route="[[route]]" matches=":page" page="{{page}}" subroute="{{subroute}}"></carbon-route>
+    <carbon-route route="[[route]]" matches=":page" page="{{page}}"></carbon-route>
+    <carbon-route route="[[route]]" matches="search" subroute="{{searchRoute}}"></carbon-route>
     <carbon-route route="[[route]]" matches="playing/:trackid" trackid="{{trackid}}"></carbon-route>
 
     <iron-ajax url="http://api.soundcloud.com/tracks/{{trackid}}?client_id={{config.clientId}}" last-response="{{currentTrack}}" auto></iron-ajax>
@@ -99,10 +100,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Nav on mobile: side nav menu -->
         <paper-menu selected="[[page]]" attr-for-selected="name">
-          <template is="dom-repeat" items="[[items]]">
-            <paper-item name="[[item.id]]"><a href="#/[[item.id]]"></a>[[item.name]]</paper-item>
-          </template>
-          <paper-item><a href="#/playing/{{trackid}}"></a>Now Playing</paper-item>
+          <paper-item name="explore"><a href="#/explore"></a>Explore</paper-item>
+          <paper-item name="search"><a href="#/search/{{searchRoute}}"></a>Search</paper-item>
+          <paper-item name="collection"><a href="#/collection"></a>My Collection</paper-item>
+          <paper-item name="stream"><a href="#/stream"></a>My Stream</paper-item>
+          <paper-item name="playing" hidden="{{!trackid}}"><a href="#/playing/{{trackid}}"></a>Now Playing</paper-item>
           <hr>
           <paper-item><a href="#/user"></a>[[_loginText(user)]]</paper-item>
         </paper-menu>
@@ -122,12 +124,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <app-toolbar class="tabs-bar" hidden$="[[!wideLayout]]">
             <!-- Nav on desktop: tabs -->
             <paper-tabs selected="[[page]]" attr-for-selected="name" bottom-item>
-              <template is="dom-repeat" items="[[items]]">
-                <paper-tab name="[[item.id]]"><a href="#/[[item.id]]">[[item.name]]</a></paper-tab>
-              </template>
-              <paper-tab name="playing"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
+              <paper-tab name="explore"><a href="#/explore">Explore</a></paper-tab>
+              <paper-tab name="search"><a href="#/search/{{searchRoute}}">Search</a></paper-tab>
+              <paper-tab name="collection"><a href="#/collection">My Collection</a></paper-tab>
+              <paper-tab name="stream"><a href="#/stream">My Stream</a></paper-tab>
+              <paper-tab name="playing" disabled="{{!trackid}}"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
               <div class="spacer"></div>
-              <paper-icon-button icon="{{_loginIcon(user)}}"></paper-icon-button>
+              <paper-icon-button icon="{{_loginIcon(user)}}" on-tap="_gotoUser"></paper-icon-button>
             </paper-tabs>
           </app-toolbar>
 
@@ -136,22 +139,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <lazy-pages selected="[[page]]">
         <template is="dom-if" name="explore">
-          <sc-page-explore route="[[subroute]]" config="[[config]]"></sc-page-explore>
+          <sc-page-explore config="[[config]]"></sc-page-explore>
         </template>
         <template is="dom-if" name="search">
-          <sc-page-search route="[[subroute]]" config="[[config]]"></sc-page-search>
+          <sc-page-search route="{{searchRoute}}" config="[[config]]"></sc-page-search>
         </template>
         <template is="dom-if" name="collection">
-          <sc-page-collection route="[[subroute]]" config="[[config]]"></sc-page-collection>
+          <sc-page-collection config="[[config]]"></sc-page-collection>
         </template>
         <template is="dom-if" name="stream">
-          <sc-page-stream route="[[subroute]]" config="[[config]]"></sc-page-stream>
+          <sc-page-stream config="[[config]]"></sc-page-stream>
         </template>
         <template is="dom-if" name="playing">
-          <sc-page-playing route="[[subroute]]" config="[[config]]" track="[[currentTrack]]"></sc-page-playing>
+          <sc-page-playing config="[[config]]" track="[[currentTrack]]"></sc-page-playing>
         </template>
         <template is="dom-if" name="user">
-          <sc-page-user route="[[subroute]]" config="[[config]]"></sc-page-user>
+          <sc-page-user config="[[config]]" user="{{user}}" on-request-login="_doLogin" on-request-logout="_doLogout"></sc-page-user>
         </template>
       </lazy-pages>
 
@@ -175,23 +178,59 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         user: {
           value: null
         },
-        items: {
-          type: Array,
-          value: function() {
-            return [
-              {name: 'Explore', id: 'explore'},
-              {name: 'Search', id: 'search'},
-              {name: 'My Collection', id: 'collection'},
-              {name: 'My Stream', id: 'stream'}
-            ];
-          }
+        trackid: {
+          value: null
         }
+      },
+      ready: function() {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://connect.soundcloud.com/sdk/sdk-3.0.0.js';
+        script.onload = this._sdkLoaded.bind(this);
+        document.head.appendChild(script);
+      },
+      _sdkLoaded: function() {
+        var token = localStorage.getItem('polymer-sc-oauth');
+        this._initSdk(token);
+        if (token) {
+          this._getUser();
+        }
+      },
+      _initSdk: function(token) {
+        SC.initialize({
+          client_id: this.config.clientId,
+          redirect_uri: window.location.origin +
+            window.location.pathname.replace(/(.*\/)[^\/]*/, '$1callback.html'),
+          oauth_token: token
+        });
+      },
+      _getUser: function() {
+        var self = this;
+        SC.get('/me').then(function(me) {
+          self.user = me;
+        });
+      },
+      _doLogin: function() {
+        var self = this;
+        SC.connect().then(function(info) {
+          localStorage.setItem('polymer-sc-oauth', info.oauth_token);
+          self._getUser();
+        });
+      },
+      _doLogout: function() {
+        localStorage.removeItem('polymer-sc-oauth');
+        this.user = null;
+        // not sure how else to clear the sdk's internal state
+        window.location.reload();
       },
       _loginIcon: function(user) {
         return user ? 'person' : 'person-outline';
       },
       _loginText: function(user) {
         return user ? 'Logout' : 'Login';
+      },
+      _gotoUser: function() {
+        window.location.hash = '/user';
       }
     });
   </script>

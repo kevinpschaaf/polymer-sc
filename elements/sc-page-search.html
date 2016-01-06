@@ -32,7 +32,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       .item {
         width: 100%;
-        height: 300px;
+        height: 400px;
         margin-bottom: 8px;
         min-width: 360px;
         box-sizing: border-box;
@@ -42,14 +42,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       @media all and (min-width: 600px) {
         .item {
-          width: 30%;
+          width: 300px;
           margin: 8px;
         }
       }
 
     </style>
 
-    <!-- <carbon-route route="[[route]]" matches=":query" query="{{query}}"></carbon-route> -->
+    <carbon-route route="[[route]]" matches=":query" query="{{query}}"></carbon-route>
 
     <iron-ajax id="queryAjax" url="http://api.soundcloud.com/tracks?q={{uri(query)}}&client_id={{config.clientId}}" debounce-duration="300" last-response="{{tracks}}" auto="{{bool(query)}}"></iron-ajax>
 
@@ -89,7 +89,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.input.focus();
       },
       _tracksChanged: function() {
-        // window.location.hash = '/search/' + this.query;
+        window.location.hash = '/search/' + this.query;
       }
     });
   </script>

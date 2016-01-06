@@ -25,8 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background: #eee;
       }
       .genre {
-        padding-left: 8px;
-        padding-top: 16px;
+        padding: 16px 8px 8px 8px;
         font-size: 20px;
         color: #777;
       }
@@ -37,26 +36,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       .item {
         width: 100%;
-        height: 300px;
+        height: 350px;
         margin-bottom: 8px;
         min-width: 360px;
         box-sizing: border-box;
       }
       .spacer {
         height: auto;
+        margin: 0;
+      }
+      .hide {
+        display: none;
       }
       @media all and (min-width: 600px) {
         :host {
           background: white;
         }
         .item {
-          width: 30%;
+          width: 300px;
+          height: 400px;
           margin: 8px;
         }
         .spacer {
-          margin: 0 8px;
+          margin: 0;
+          height: auto;
         }
         .genre {
+          padding-right: 0;
           padding-left: 0;
         }
       }
@@ -65,9 +71,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template is="dom-repeat" items="{{genres}}" as="genre">
       <iron-ajax url="http://api.soundcloud.com/tracks?limit=9&genres={{genre.name}}&client_id={{config.clientId}}"
            last-response="{{genre.tracks}}" loading="{{genre.loading}}" auto></iron-ajax>
-      <!-- <paper-spinner hidden="{{!genre.loading}}" active="{{genre.loading}}"></paper-spinner> -->
       <div class="list">
-        <div class="item spacer genre">{{genre.name}}</div>
+        <div class="item spacer genre" hidden="{{genre.loading}}">{{genre.name}}</div>
         <div class="item spacer"></div>
         <div class="item spacer"></div>
       </div>
