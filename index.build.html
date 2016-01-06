@@ -3088,14 +3088,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       .artwork {
         @apply(--layout-fit);
+      }
+      .artwork.blur {
         -webkit-filter: blur(10px) brightness(50%);
         filter: blur(10px) brightness(50%);
         margin: -15px -15px -15px -15px;
+        transition: opacity 0.1s ease-in;
       }
-      .playing > .artwork {
-        -webkit-filter: none;
-        filter: none;
-        margin: 0;
+      .playing .artwork.blur {
+        opacity: 0;
       }
       .details {
         position: absolute;
@@ -3126,6 +3127,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class$="artwork-box {{_playingClass(playing)}}">
       <iron-image class="artwork" src="{{_medArtwork(track.artwork_url)}}" sizing="cover">
+        <iron-image class="artwork blur" src="{{_medArtwork(track.artwork_url)}}" sizing="cover"></iron-image>
       </iron-image>
       <div class="details">
         <div class="byline">{{track.user.username}}</div><br>
@@ -3195,9 +3197,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .iron-selected paper-item {
         font-weight: bold;
       }
-      [hide] {
-        visibility: hidden;
-      }
     </style>
 
     <carbon-router route="{{route}}"></carbon-router>
@@ -3229,8 +3228,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a name="playlists" href="#/playlists" hidden$="{{!user}}">
             <paper-item><iron-icon icon="library-books"></iron-icon>My Playlists</paper-item>
           </a>
-          <a name="playing" href="#/playing/{{trackid}}">
-            <paper-item hidden="{{!trackid}}"><iron-icon icon="play-arrow"></iron-icon>Now Playing</paper-item>
+          <a name="playing" href="#/playing/{{trackid}}" hidden$="{{!trackid}}">
+            <paper-item><iron-icon icon="play-arrow"></iron-icon>Now Playing</paper-item>
           </a>
         </paper-menu>
 
@@ -3249,12 +3248,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <app-toolbar class="tabs-bar" hidden$="[[!wideLayout]]">
             
-            <paper-tabs selected="[[page]]" attr-for-selected="name" bottom-item="">
+            <paper-tabs selected="[[page]]" attr-for-selected="name" bottom-item="" on-dom-change="_resizeTabs">
               <paper-tab class="solid" name="explore"><a href="#/explore">Explore</a></paper-tab>
               <paper-tab class="solid" name="search"><a href="#/search/{{searchRoute}}">Search</a></paper-tab>
-              <paper-tab name="stream" hide$="{{!user}}"><a href="#/stream">My Stream</a></paper-tab>
-              <paper-tab name="playlists" hide$="{{!user}}"><a href="#/playlists">My Playlists</a></paper-tab>
-              <paper-tab name="playing" hide$="{{!trackid}}"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
+              <template is="dom-if" if="[[user]]">
+                <paper-tab name="stream"><a href="#/stream">My Stream</a></paper-tab>
+                <paper-tab name="playlists"><a href="#/playlists">My Playlists</a></paper-tab>
+              </template>
+              <template is="dom-if" if="[[trackid]]">
+                <paper-tab name="playing"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
+              </template>
             </paper-tabs>
           </app-toolbar>
 

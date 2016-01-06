@@ -32,14 +32,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       .artwork {
         @apply(--layout-fit);
+      }
+      .artwork.blur {
         -webkit-filter: blur(10px) brightness(50%);
         filter: blur(10px) brightness(50%);
         margin: -15px -15px -15px -15px;
+        transition: opacity 0.1s ease-in;
       }
-      .playing > .artwork {
-        -webkit-filter: none;
-        filter: none;
-        margin: 0;
+      .playing .artwork.blur {
+        opacity: 0;
       }
       .details {
         position: absolute;
@@ -70,6 +71,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class$="artwork-box {{_playingClass(playing)}}">
       <iron-image class="artwork" src="{{_medArtwork(track.artwork_url)}}" sizing="cover">
+        <iron-image class="artwork blur" src="{{_medArtwork(track.artwork_url)}}" sizing="cover"></iron-image>
       </iron-image>
       <div class="details">
         <div class="byline">{{track.user.username}}</div><br>
