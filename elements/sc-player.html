@@ -169,6 +169,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value += (this.duration * -e.detail.dx / this.width);
           value = Math.max(Math.min(value, this.duration), 0);
           this.value = value;
+          this.$.audio.currentTime = value;
         }
       },
       _updatevalue: function(e) {

@@ -69,6 +69,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       paper-item a {
         @apply(--layout-fit);
       }
+      paper-item iron-icon {
+        margin-right: 16px;
+      }
       .logo {
         @apply(--layout-fit);
         background-image: url(../resources/toolbar-logo.png);
@@ -104,13 +107,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Nav on mobile: side nav menu -->
         <paper-menu selected="[[page]]" attr-for-selected="name">
-          <a name="explore" href="#/explore"><paper-item>Explore</paper-item></a>
-          <a name="search" href="#/search/{{searchRoute}}"><paper-item>Search</paper-item></a>
-          <a name="stream" href="#/stream" hidden$="{{!user}}"><paper-item>My Stream</paper-item></a>
-          <a name="playlists" href="#/playlists" hidden$="{{!user}}"><paper-item>My Playlists</paper-item></a>
-          <a name="playing" href="#/playing/{{trackid}}"><paper-item hidden="{{!trackid}}">Now Playing</paper-item></a>
-          <hr>
-          <a name="user" href="#/user"><paper-item>[[_loginText(user)]]</paper-item></a>
+          <a name="explore" href="#/explore">
+            <paper-item><iron-icon icon="explore"></iron-icon>Explore</paper-item>
+          </a>
+          <a name="search" href="#/search/{{searchRoute}}">
+            <paper-item><iron-icon icon="search"></iron-icon>Search</paper-item>
+          </a>
+          <a name="stream" href="#/stream" hidden$="{{!user}}">
+            <paper-item><iron-icon icon="library-music"></iron-icon>My Stream</paper-item>
+          </a>
+          <a name="playlists" href="#/playlists" hidden$="{{!user}}">
+            <paper-item><iron-icon icon="library-books"></iron-icon>My Playlists</paper-item>
+          </a>
+          <a name="playing" href="#/playing/{{trackid}}">
+            <paper-item hidden="{{!trackid}}"><iron-icon icon="play-arrow"></iron-icon>Now Playing</paper-item>
+          </a>
         </paper-menu>
 
       </div>
@@ -122,7 +133,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <app-toolbar>
             <paper-icon-button class="menu-button" icon="menu" drawer-toggle hidden$="[[wideLayout]]"></paper-icon-button>
-            <div title>Polymer SoundCloud</div>
+            <div title class="spacer">Polymer SoundCloud</div>
+            <paper-icon-button icon="{{_loginIcon(user)}}" on-tap="_toggleLogin"></paper-icon-button>
           </app-toolbar>
 
           <app-toolbar class="tabs-bar" hidden$="[[!wideLayout]]">
@@ -133,8 +145,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-tab name="stream" hide$="{{!user}}"><a href="#/stream">My Stream</a></paper-tab>
               <paper-tab name="playlists" hide$="{{!user}}"><a href="#/playlists">My Playlists</a></paper-tab>
               <paper-tab name="playing" hide$="{{!trackid}}"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
-              <div class="spacer"></div>
-              <paper-icon-button icon="{{_loginIcon(user)}}" on-tap="_toggleLogin"></paper-icon-button>
             </paper-tabs>
           </app-toolbar>
 
