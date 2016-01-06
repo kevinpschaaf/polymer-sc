@@ -110,7 +110,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div id="duration">{{_toTime(duration)}}</div>
     </div>
 
-    <audio id="audio" src="{{_streamUrl(track, config)}}" current-time="{{value::timeupdate}}" on-play="_updatePlaying" on-pause="_updatePlaying" autoplay>
+    <audio id="audio" src="{{_streamUrl(track, config)}}" on-timeupdate="_updatevalue" on-play="_updatePlaying" on-pause="_updatePlaying" autoplay>
 
   </template>
 
@@ -130,6 +130,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         playing: {
           notify: true
+        },
+        currentTime: {
+          observer: '_currentTimeChanged'
         }
       },
       observers: [
@@ -167,6 +170,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value = Math.max(Math.min(value, this.duration), 0);
           this.value = value;
         }
+      },
+      _updatevalue: function(e) {
+        this.value = e.target.currentTime;
       },
       _valueChanged: function(value, track) {
         var offset = '-' + Math.round(this.width * value / this.duration);

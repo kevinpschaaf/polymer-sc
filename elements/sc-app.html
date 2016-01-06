@@ -65,6 +65,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: inherit;
       }
       paper-tab a {
+        @apply(--layout-fit);
         @apply(--layout-horizontal);
         @apply(--layout-center-center);
       }
@@ -80,6 +81,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       .spacer {
         @apply(--layout-flex);
+      }
+      .iron-selected paper-item {
+        font-weight: bold;
       }
     </style>
 
@@ -100,13 +104,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Nav on mobile: side nav menu -->
         <paper-menu selected="[[page]]" attr-for-selected="name">
-          <paper-item name="explore"><a href="#/explore"></a>Explore</paper-item>
-          <paper-item name="search"><a href="#/search/{{searchRoute}}"></a>Search</paper-item>
-          <paper-item name="collection"><a href="#/collection"></a>My Collection</paper-item>
-          <paper-item name="stream"><a href="#/stream"></a>My Stream</paper-item>
-          <paper-item name="playing" hidden="{{!trackid}}"><a href="#/playing/{{trackid}}"></a>Now Playing</paper-item>
+          <a name="explore" href="#/explore"><paper-item>Explore</paper-item></a>
+          <a name="search" href="#/search/{{searchRoute}}"><paper-item>Search</paper-item></a>
+          <a name="collection" href="#/collection"><paper-item>My Collection</paper-item></a>
+          <a name="stream" href="#/stream"><paper-item>My Stream</paper-item></a>
+          <a name="playing" href="#/playing/{{trackid}}"><paper-item hidden="{{!trackid}}">Now Playing</paper-item></a>
           <hr>
-          <paper-item><a href="#/user"></a>[[_loginText(user)]]</paper-item>
+          <a name="user" href="#/user"><paper-item>[[_loginText(user)]]</paper-item></a>
         </paper-menu>
 
       </div>

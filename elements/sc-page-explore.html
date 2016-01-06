@@ -22,7 +22,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
-        background: #eee;
       }
       .genre {
         padding: 16px 8px 8px 8px;
@@ -38,28 +37,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 100%;
         height: 350px;
         margin-bottom: 8px;
-        min-width: 360px;
         box-sizing: border-box;
+        border-bottom: 1px solid #ccc;
       }
       .spacer {
         height: auto;
         margin: 0;
+        border-bottom: none;
       }
       .hide {
         display: none;
       }
       @media all and (min-width: 600px) {
-        :host {
-          background: white;
-        }
         .item {
-          width: 300px;
+          width: 360px;
           height: 400px;
           margin: 8px;
+          border-bottom: none;
         }
         .spacer {
           margin: 0;
           height: auto;
+          border-bottom: none;
         }
         .genre {
           padding-right: 0;
