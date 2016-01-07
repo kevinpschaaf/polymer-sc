@@ -19,6 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/carbon-elements/carbon-router.html">
 
 <link rel="import" href="lazy-pages.html">
@@ -34,6 +35,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template strip-whitespace>
 
     <style>
+      :host {
+        display: block;
+      }
       app-toolbar {
         color: white;
       }
@@ -101,29 +105,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <div drawer>
 
-        <app-toolbar>
-          <div title>Polymer SoundCloud</div>
-        </app-toolbar>
+        <template is="dom-if" if="{{_makeDrawer(wideLayout, lazyFlag)}}">
+          <app-toolbar>
+            <div title>Polymer SoundCloud</div>
+          </app-toolbar>
 
-        <!-- Nav on mobile: side nav menu -->
-        <paper-menu selected="[[page]]" attr-for-selected="name" activate-event="">
-          <a name="explore" href="#/explore">
-            <paper-item><iron-icon icon="explore"></iron-icon>Explore</paper-item>
-          </a>
-          <a name="search" href="#/search/{{searchRoute}}">
-            <paper-item><iron-icon icon="search"></iron-icon>Search</paper-item>
-          </a>
-          <a name="stream" href="#/stream" hidden$="{{!user}}">
-            <paper-item><iron-icon icon="library-music"></iron-icon>My Stream</paper-item>
-          </a>
-          <a name="playlists" href="#/playlists" hidden$="{{!user}}">
-            <paper-item><iron-icon icon="library-books"></iron-icon>My Playlists</paper-item>
-          </a>
-          <a name="playing" href="#/playing/{{trackid}}" hidden$="{{!trackid}}">
-            <paper-item><iron-icon icon="play-arrow"></iron-icon>Now Playing</paper-item>
-          </a>
-        </paper-menu>
-
+          <!-- Nav on mobile: side nav menu -->
+          <paper-menu selected="[[page]]" attr-for-selected="name" activate-event="">
+            <a name="explore" href="#/explore">
+              <paper-item><iron-icon icon="explore"></iron-icon>Explore</paper-item>
+            </a>
+            <a name="search" href="#/search/{{searchRoute}}">
+              <paper-item><iron-icon icon="search"></iron-icon>Search</paper-item>
+            </a>
+            <a name="stream" href="#/stream" hidden$="{{!user}}">
+              <paper-item><iron-icon icon="library-music"></iron-icon>My Stream</paper-item>
+            </a>
+            <a name="playlists" href="#/playlists" hidden$="{{!user}}">
+              <paper-item><iron-icon icon="library-books"></iron-icon>My Playlists</paper-item>
+            </a>
+            <a name="playing" href="#/playing/{{trackid}}" hidden$="{{!trackid}}">
+              <paper-item><iron-icon icon="play-arrow"></iron-icon>Now Playing</paper-item>
+            </a>
+          </paper-menu>
+        </template>
       </div>
 
       <app-header-layout main>
@@ -138,18 +143,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-toolbar>
 
           <app-toolbar class="tabs-bar" hidden$="[[!wideLayout]]">
-            <!-- Nav on desktop: tabs -->
-            <paper-tabs selected="[[page]]" attr-for-selected="name" bottom-item on-dom-change="_resizeTabs">
-              <paper-tab class="solid" name="explore"><a href="#/explore">Explore</a></paper-tab>
-              <paper-tab class="solid" name="search"><a href="#/search/{{searchRoute}}">Search</a></paper-tab>
-              <template is="dom-if" if="[[user]]">
-                <paper-tab name="stream"><a href="#/stream">My Stream</a></paper-tab>
-                <paper-tab name="playlists"><a href="#/playlists">My Playlists</a></paper-tab>
-              </template>
-              <template is="dom-if" if="[[trackid]]">
-                <paper-tab name="playing"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
-              </template>
-            </paper-tabs>
+            <template is="dom-if" if="{{_makeTabs(wideLayout, lazyFlag)}}">
+              <!-- Nav on desktop: tabs -->
+              <paper-tabs selected="[[page]]" attr-for-selected="name" bottom-item on-dom-change="_resizeTabs">
+                <paper-tab class="solid" name="explore"><a href="#/explore">Explore</a></paper-tab>
+                <paper-tab class="solid" name="search"><a href="#/search/{{searchRoute}}">Search</a></paper-tab>
+                <template is="dom-if" if="[[user]]">
+                  <paper-tab name="stream"><a href="#/stream">My Stream</a></paper-tab>
+                  <paper-tab name="playlists"><a href="#/playlists">My Playlists</a></paper-tab>
+                </template>
+                <template is="dom-if" if="[[trackid]]">
+                  <paper-tab name="playing"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
+                </template>
+              </paper-tabs>
+            </template>
           </app-toolbar>
 
         </app-header>
@@ -177,6 +184,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </lazy-pages>
 
     </app-drawer-layout>
+
+    <paper-toast id="loginToast" text="Logged in as {{user.username}}"></paper-toast>
 
     <iron-media-query query="min-width: 600px" query-matches="{{wideLayout}}"></iron-media-query>
 
@@ -212,6 +221,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         script.src = 'https://connect.soundcloud.com/sdk/sdk-3.0.0.js';
         script.onload = this._sdkLoaded.bind(this);
         document.head.appendChild(script);
+        Polymer.RenderStatus.afterNextRender(this, function() {
+          this.lazyFlag = true;
+        });
+        this.removeAttribute('pending');
       },
       _pageChanged: function() {
         this.$.drawer.opened = false;
@@ -236,6 +249,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         SC.get('/me').then(function(me) {
           me.oauthToken = self.oauthToken;
           self.user = me;
+          self.$.loginToast.open();
         });
       },
       _toggleLogin: function() {
@@ -267,6 +281,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       _resizeTabs: function(e) {
         e.currentTarget.notifyResize();
+      },
+      _makeDrawer: function(wide, lazy) {
+        return !wide && lazy;
+      },
+      _makeTabs: function(wide, lazy) {
+        return wide && lazy;
       }
     });
   </script>

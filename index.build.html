@@ -694,63 +694,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </style>
 
 
-<style is="custom-style">
-
-  :root {
-
-    --shadow-transition: {
-      transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-    };
-
-    --shadow-none: {
-      box-shadow: none;
-    };
-
-    /* from http://codepen.io/shyndman/pen/c5394ddf2e8b2a5c9185904b57421cdb */
-
-    --shadow-elevation-2dp: {
-      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 5px 0 rgba(0, 0, 0, 0.12),
-                  0 3px 1px -2px rgba(0, 0, 0, 0.2);
-    };
-
-    --shadow-elevation-3dp: {
-      box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 8px 0 rgba(0, 0, 0, 0.12),
-                  0 3px 3px -2px rgba(0, 0, 0, 0.4);
-    };
-
-    --shadow-elevation-4dp: {
-      box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 10px 0 rgba(0, 0, 0, 0.12),
-                  0 2px 4px -1px rgba(0, 0, 0, 0.4);
-    };
-
-    --shadow-elevation-6dp: {
-      box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 18px 0 rgba(0, 0, 0, 0.12),
-                  0 3px 5px -1px rgba(0, 0, 0, 0.4);
-    };
-
-    --shadow-elevation-8dp: {
-      box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
-                  0 3px 14px 2px rgba(0, 0, 0, 0.12),
-                  0 5px 5px -3px rgba(0, 0, 0, 0.4);
-    };
-
-    --shadow-elevation-16dp: {
-      box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
-                  0  6px 30px 5px rgba(0, 0, 0, 0.12),
-                  0  8px 10px -5px rgba(0, 0, 0, 0.4);
-    };
-
-  }
-
-</style>
-
-
-
-
 <link href="//fonts.googleapis.com/css?family=RobotoDraft:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet" type="text/css">
 <style is="custom-style">
 
@@ -908,6 +851,65 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
 </style>
+
+
+<style is="custom-style">
+
+  :root {
+
+    --shadow-transition: {
+      transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    };
+
+    --shadow-none: {
+      box-shadow: none;
+    };
+
+    /* from http://codepen.io/shyndman/pen/c5394ddf2e8b2a5c9185904b57421cdb */
+
+    --shadow-elevation-2dp: {
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    };
+
+    --shadow-elevation-3dp: {
+      box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 8px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 3px -2px rgba(0, 0, 0, 0.4);
+    };
+
+    --shadow-elevation-4dp: {
+      box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 10px 0 rgba(0, 0, 0, 0.12),
+                  0 2px 4px -1px rgba(0, 0, 0, 0.4);
+    };
+
+    --shadow-elevation-6dp: {
+      box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 18px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 5px -1px rgba(0, 0, 0, 0.4);
+    };
+
+    --shadow-elevation-8dp: {
+      box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                  0 3px 14px 2px rgba(0, 0, 0, 0.12),
+                  0 5px 5px -3px rgba(0, 0, 0, 0.4);
+    };
+
+    --shadow-elevation-16dp: {
+      box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
+                  0  6px 30px 5px rgba(0, 0, 0, 0.12),
+                  0  8px 10px -5px rgba(0, 0, 0, 0.4);
+    };
+
+  }
+
+</style>
+
+
+
+
 <style>
 
     body {
@@ -916,11 +918,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       background-color: #f5f5f5;
       -webkit-tap-highlight-color: transparent;
     }
+    [pending] {
+      display: none;
+    }
 
   </style>
 
 </head>
-<body unresolved=""><div hidden="" by-vulcanize=""><dom-module id="app-drawer" assetpath="bower_components/app-layout/app-drawer/">
+<body><div hidden="" by-vulcanize=""><dom-module id="app-drawer" assetpath="bower_components/app-layout/app-drawer/">
 
   <style>
 
@@ -1740,6 +1745,102 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <paper-icon-button icon="paper-tabs:chevron-right" class$="[[_computeScrollButtonClass(_rightHidden, scrollable, hideScrollButtons)]]" on-up="_onScrollButtonUp" on-down="_onRightScrollButtonDown" tabindex="-1"></paper-icon-button>
 
+  </template>
+
+  </dom-module>
+<dom-module id="iron-a11y-announcer" assetpath="bower_components/iron-a11y-announcer/">
+  <style>
+    :host {
+      display: inline-block;
+      position: fixed;
+      clip: rect(0px,0px,0px,0px);
+    }
+  </style>
+
+  <template>
+    <div aria-live$="[[mode]]">[[_text]]</div>
+  </template>
+
+  </dom-module>
+<dom-module id="iron-overlay-backdrop" assetpath="bower_components/iron-overlay-behavior/">
+
+  <style>
+
+    :host {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: var(--iron-overlay-backdrop-background-color, #000);
+      opacity: 0;
+      transition: opacity 0.2s;
+
+      @apply(--iron-overlay-backdrop);
+    }
+
+    :host([opened]) {
+      opacity: var(--iron-overlay-backdrop-opacity, 0.6);
+
+      @apply(--iron-overlay-backdrop-opened);
+    }
+
+  </style>
+
+  <template>
+    <content></content>
+  </template>
+
+</dom-module>
+
+<dom-module id="paper-toast" assetpath="bower_components/paper-toast/">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: fixed;
+        background-color: var(--paper-toast-background-color, #323232);
+        color: var(--paper-toast-color, #f1f1f1);
+        min-height: 48px;
+        min-width: 288px;
+        padding: 16px 24px 12px;
+        box-sizing: border-box;
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+        border-radius: 2px;
+        left: 0;
+        bottom: 0;
+        margin: 12px;
+        font-size: 14px;
+        cursor: default;
+        -webkit-transition: visibility 0.3s, -webkit-transform 0.3s, opacity 0.3s;
+        transition: visibility 0.3s, transform 0.3s, opacity 0.3s;
+        visibility: hidden;
+        opacity: 0;
+        -webkit-transform: translateY(100px);
+        transform: translateY(100px);
+      }
+
+      :host(.capsule) {
+        border-radius: 24px;
+      }
+
+      :host(.fit-bottom) {
+        width: 100%;
+        min-width: 0;
+        border-radius: 0;
+        margin: 0;
+      }
+
+      :host(.paper-toast-open) {
+        visibility: visible;
+        opacity: 1;
+        -webkit-transform: translateY(0px);
+        transform: translateY(0px);
+      }
+    </style>
+
+    <span id="label">{{text}}</span>
+    <content></content>
   </template>
 
   </dom-module>
@@ -3146,6 +3247,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template strip-whitespace="">
 
     <style>
+      :host {
+        display: block;
+      }
       app-toolbar {
         color: white;
       }
@@ -3213,29 +3317,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <div drawer="">
 
-        <app-toolbar>
-          <div title="">Polymer SoundCloud</div>
-        </app-toolbar>
+        <template is="dom-if" if="{{_makeDrawer(wideLayout, lazyFlag)}}">
+          <app-toolbar>
+            <div title="">Polymer SoundCloud</div>
+          </app-toolbar>
 
-        
-        <paper-menu selected="[[page]]" attr-for-selected="name" activate-event="">
-          <a name="explore" href="#/explore">
-            <paper-item><iron-icon icon="explore"></iron-icon>Explore</paper-item>
-          </a>
-          <a name="search" href="#/search/{{searchRoute}}">
-            <paper-item><iron-icon icon="search"></iron-icon>Search</paper-item>
-          </a>
-          <a name="stream" href="#/stream" hidden$="{{!user}}">
-            <paper-item><iron-icon icon="library-music"></iron-icon>My Stream</paper-item>
-          </a>
-          <a name="playlists" href="#/playlists" hidden$="{{!user}}">
-            <paper-item><iron-icon icon="library-books"></iron-icon>My Playlists</paper-item>
-          </a>
-          <a name="playing" href="#/playing/{{trackid}}" hidden$="{{!trackid}}">
-            <paper-item><iron-icon icon="play-arrow"></iron-icon>Now Playing</paper-item>
-          </a>
-        </paper-menu>
-
+          
+          <paper-menu selected="[[page]]" attr-for-selected="name" activate-event="">
+            <a name="explore" href="#/explore">
+              <paper-item><iron-icon icon="explore"></iron-icon>Explore</paper-item>
+            </a>
+            <a name="search" href="#/search/{{searchRoute}}">
+              <paper-item><iron-icon icon="search"></iron-icon>Search</paper-item>
+            </a>
+            <a name="stream" href="#/stream" hidden$="{{!user}}">
+              <paper-item><iron-icon icon="library-music"></iron-icon>My Stream</paper-item>
+            </a>
+            <a name="playlists" href="#/playlists" hidden$="{{!user}}">
+              <paper-item><iron-icon icon="library-books"></iron-icon>My Playlists</paper-item>
+            </a>
+            <a name="playing" href="#/playing/{{trackid}}" hidden$="{{!trackid}}">
+              <paper-item><iron-icon icon="play-arrow"></iron-icon>Now Playing</paper-item>
+            </a>
+          </paper-menu>
+        </template>
       </div>
 
       <app-header-layout main="">
@@ -3250,18 +3355,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-toolbar>
 
           <app-toolbar class="tabs-bar" hidden$="[[!wideLayout]]">
-            
-            <paper-tabs selected="[[page]]" attr-for-selected="name" bottom-item="" on-dom-change="_resizeTabs">
-              <paper-tab class="solid" name="explore"><a href="#/explore">Explore</a></paper-tab>
-              <paper-tab class="solid" name="search"><a href="#/search/{{searchRoute}}">Search</a></paper-tab>
-              <template is="dom-if" if="[[user]]">
-                <paper-tab name="stream"><a href="#/stream">My Stream</a></paper-tab>
-                <paper-tab name="playlists"><a href="#/playlists">My Playlists</a></paper-tab>
-              </template>
-              <template is="dom-if" if="[[trackid]]">
-                <paper-tab name="playing"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
-              </template>
-            </paper-tabs>
+            <template is="dom-if" if="{{_makeTabs(wideLayout, lazyFlag)}}">
+              
+              <paper-tabs selected="[[page]]" attr-for-selected="name" bottom-item="" on-dom-change="_resizeTabs">
+                <paper-tab class="solid" name="explore"><a href="#/explore">Explore</a></paper-tab>
+                <paper-tab class="solid" name="search"><a href="#/search/{{searchRoute}}">Search</a></paper-tab>
+                <template is="dom-if" if="[[user]]">
+                  <paper-tab name="stream"><a href="#/stream">My Stream</a></paper-tab>
+                  <paper-tab name="playlists"><a href="#/playlists">My Playlists</a></paper-tab>
+                </template>
+                <template is="dom-if" if="[[trackid]]">
+                  <paper-tab name="playing"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
+                </template>
+              </paper-tabs>
+            </template>
           </app-toolbar>
 
         </app-header>
@@ -3290,6 +3397,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </app-drawer-layout>
 
+    <paper-toast id="loginToast" text="Logged in as {{user.username}}"></paper-toast>
+
     <iron-media-query query="min-width: 600px" query-matches="{{wideLayout}}"></iron-media-query>
 
   </template>
@@ -3297,7 +3406,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </dom-module>
 </div>
 
-  <sc-app></sc-app>
+  <sc-app pending=""></sc-app>
 
 
 
