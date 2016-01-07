@@ -84,7 +84,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="action">{{track.user.username}} <span class="dim">posted</span> a track</div>
     </div>
 
-    <iron-image class="artwork flex" src="{{_largeArtwork(track.artwork_url)}}" preload fade sizing="cover">
+    <iron-image class="artwork flex" position="center" placeholder="resources/item-logo.png" src="{{_largeArtwork(track.artwork_url)}}" preload fade sizing="cover">
       <a href="#/playing/{{track.id}}" class="fit">
         <div class="inset">
           <div class="byline">{{track.user.username}}</div><br>
@@ -116,7 +116,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       properties: {
       },
       _largeArtwork: function(url) {
-        return url && url.replace(/large.jpg$/, 't500x500.jpg');
+        return url ? url.replace(/large.jpg$/, 't500x500.jpg') : '';
       },
       _formatNumber: function(number) {
         number = '' + number;

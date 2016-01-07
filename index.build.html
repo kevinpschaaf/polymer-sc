@@ -2361,7 +2361,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="action">{{track.user.username}} <span class="dim">posted</span> a track</div>
     </div>
 
-    <iron-image class="artwork flex" src="{{_largeArtwork(track.artwork_url)}}" preload="" fade="" sizing="cover">
+    <iron-image class="artwork flex" position="center" placeholder="resources/item-logo.png" src="{{_largeArtwork(track.artwork_url)}}" preload="" fade="" sizing="cover">
       <a href="#/playing/{{track.id}}" class="fit">
         <div class="inset">
           <div class="byline">{{track.user.username}}</div><br>
@@ -3126,8 +3126,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class$="artwork-box {{_playingClass(playing)}}" on-tap="_togglePlaying">
-      <iron-image class="artwork" src="{{_medArtwork(track.artwork_url)}}" sizing="cover">
-        <iron-image class="artwork blur" src="{{_medArtwork(track.artwork_url)}}" sizing="cover"></iron-image>
+      <iron-image class="artwork" placeholder="resources/item-logo.png" src="{{_medArtwork(track.artwork_url)}}" sizing="cover">
+        <iron-image class="artwork blur" placeholder="resources/item-logo.png" src="{{_medArtwork(track.artwork_url)}}" sizing="cover"></iron-image>
       </iron-image>
       <div class="details">
         <div class="byline">{{track.user.username}}</div><br>

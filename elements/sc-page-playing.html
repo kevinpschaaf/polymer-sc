@@ -70,8 +70,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class$="artwork-box {{_playingClass(playing)}}" on-tap="_togglePlaying">
-      <iron-image class="artwork" src="{{_medArtwork(track.artwork_url)}}" sizing="cover">
-        <iron-image class="artwork blur" src="{{_medArtwork(track.artwork_url)}}" sizing="cover"></iron-image>
+      <iron-image class="artwork" placeholder="resources/item-logo.png" src="{{_medArtwork(track.artwork_url)}}" sizing="cover">
+        <iron-image class="artwork blur" placeholder="resources/item-logo.png" src="{{_medArtwork(track.artwork_url)}}" sizing="cover"></iron-image>
       </iron-image>
       <div class="details">
         <div class="byline">{{track.user.username}}</div><br>
@@ -88,9 +88,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'sc-page-playing',
       properties: {
+        playing: {
+          value: false
+        }
       },
       _medArtwork: function(url) {
-        return url && url.replace(/large.jpg$/, 't300x300.jpg');
+        return url ? url.replace(/large.jpg$/, 't300x300.jpg') : 'resources/item-logo.png';
       },
       _playingClass: function(playing) {
         return playing ? 'playing' : '';
