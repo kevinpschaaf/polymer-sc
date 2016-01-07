@@ -71,7 +71,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <template is="dom-repeat" items="{{genres}}" as="genre" initial-count="1">
-      <iron-ajax url="http://api.soundcloud.com/tracks?limit=9&genres={{genre.name}}&client_id={{config.clientId}}&oauth_token={{user.oauthToken}}"
+      <iron-ajax url="//api.soundcloud.com/tracks?limit=9&genres={{genre.name}}&client_id={{config.clientId}}&oauth_token={{user.oauthToken}}"
            last-response="{{genre.tracks}}" loading="{{genre.loading}}" auto></iron-ajax>
       <div class="list">
         <div class="item spacer genre" hidden="{{!genre.tracks.length}}">{{genre.name}}</div>

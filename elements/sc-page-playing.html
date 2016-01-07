@@ -69,7 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <div class$="artwork-box {{_playingClass(playing)}}">
+    <div class$="artwork-box {{_playingClass(playing)}}" on-tap="_togglePlaying">
       <iron-image class="artwork" src="{{_medArtwork(track.artwork_url)}}" sizing="cover">
         <iron-image class="artwork blur" src="{{_medArtwork(track.artwork_url)}}" sizing="cover"></iron-image>
       </iron-image>
@@ -77,7 +77,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="byline">{{track.user.username}}</div><br>
         <div class="title">{{track.title}}</div>
       </div>
-      <paper-icon-button class="playpause" icon="{{_playingIcon(playing)}}" on-tap="_togglePlaying"></paper-icon-button>
+      <paper-icon-button class="playpause" icon="{{_playingIcon(playing)}}"></paper-icon-button>
     </div>
 
     <sc-player id="player" track="{{track}}" config="{{config}}" playing="{{playing}}"></sc-player>

@@ -92,7 +92,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <carbon-route route="[[route]]" matches="search" subroute="{{searchRoute}}"></carbon-route>
     <carbon-route route="[[route]]" matches="playing/:trackid" trackid="{{trackid}}"></carbon-route>
 
-    <iron-ajax url="http://api.soundcloud.com/tracks/{{trackid}}?client_id={{config.clientId}}" last-response="{{currentTrack}}" auto></iron-ajax>
+    <iron-ajax url="//api.soundcloud.com/tracks/{{trackid}}?client_id={{config.clientId}}" last-response="{{currentTrack}}" auto></iron-ajax>
 
     <app-drawer-layout force-narrow>
 

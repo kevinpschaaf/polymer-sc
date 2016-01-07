@@ -34,7 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <template is="dom-if" if="{{user}}">
 
-      <iron-ajax url="http://api.soundcloud.com/me/playlists?oauth_token={{user.oauthToken}}&client_id={{config.clientId}}" last-response="{{playlists}}" auto="{{user.oauthToken}}"></iron-ajax>
+      <iron-ajax url="//api.soundcloud.com/me/playlists?oauth_token={{user.oauthToken}}&client_id={{config.clientId}}" last-response="{{playlists}}" auto="{{user.oauthToken}}"></iron-ajax>
 
       <div class="list">
         <template is="dom-repeat" items="{{playlists}}" as="playlist">

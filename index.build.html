@@ -2444,7 +2444,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <template is="dom-repeat" items="{{genres}}" as="genre" initial-count="1">
-      <iron-ajax url="http://api.soundcloud.com/tracks?limit=9&amp;genres={{genre.name}}&amp;client_id={{config.clientId}}&amp;oauth_token={{user.oauthToken}}" last-response="{{genre.tracks}}" loading="{{genre.loading}}" auto=""></iron-ajax>
+      <iron-ajax url="//api.soundcloud.com/tracks?limit=9&amp;genres={{genre.name}}&amp;client_id={{config.clientId}}&amp;oauth_token={{user.oauthToken}}" last-response="{{genre.tracks}}" loading="{{genre.loading}}" auto=""></iron-ajax>
       <div class="list">
         <div class="item spacer genre" hidden="{{!genre.tracks.length}}">{{genre.name}}</div>
         <div class="item spacer"></div>
@@ -2821,7 +2821,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <carbon-route route="[[route]]" matches=":query" query="{{query}}"></carbon-route>
 
-    <iron-ajax id="queryAjax" url="http://api.soundcloud.com/tracks?q={{uri(query)}}&amp;limit=20&amp;client_id={{config.clientId}}&amp;oauth_token={{user.oauthToken}}" debounce-duration="300" last-response="{{tracks}}" auto="{{bool(query)}}"></iron-ajax>
+    <iron-ajax id="queryAjax" url="//api.soundcloud.com/tracks?q={{uri(query)}}&amp;limit=20&amp;client_id={{config.clientId}}&amp;oauth_token={{user.oauthToken}}" debounce-duration="300" last-response="{{tracks}}" auto="{{bool(query)}}"></iron-ajax>
 
     <paper-input id="input" class="short" no-label-float="" placeholder="Search" value="{{query}}">
       <iron-icon icon="search" prefix=""></iron-icon>
@@ -2885,7 +2885,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <template is="dom-if" if="{{user}}">
 
-      <iron-ajax url="http://api.soundcloud.com/me/activities?oauth_token={{user.oauthToken}}&amp;client_id={{config.clientId}}" last-response="{{items}}" auto="{{user.oauthToken}}"></iron-ajax>
+      <iron-ajax url="//api.soundcloud.com/me/activities?oauth_token={{user.oauthToken}}&amp;client_id={{config.clientId}}" last-response="{{items}}" auto="{{user.oauthToken}}"></iron-ajax>
 
       <div class="list">
         <template is="dom-repeat" items="{{tracks}}" as="track">
@@ -2954,7 +2954,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <template is="dom-if" if="{{user}}">
 
-      <iron-ajax url="http://api.soundcloud.com/me/playlists?oauth_token={{user.oauthToken}}&amp;client_id={{config.clientId}}" last-response="{{playlists}}" auto="{{user.oauthToken}}"></iron-ajax>
+      <iron-ajax url="//api.soundcloud.com/me/playlists?oauth_token={{user.oauthToken}}&amp;client_id={{config.clientId}}" last-response="{{playlists}}" auto="{{user.oauthToken}}"></iron-ajax>
 
       <div class="list">
         <template is="dom-repeat" items="{{playlists}}" as="playlist">
@@ -3125,7 +3125,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <div class$="artwork-box {{_playingClass(playing)}}">
+    <div class$="artwork-box {{_playingClass(playing)}}" on-tap="_togglePlaying">
       <iron-image class="artwork" src="{{_medArtwork(track.artwork_url)}}" sizing="cover">
         <iron-image class="artwork blur" src="{{_medArtwork(track.artwork_url)}}" sizing="cover"></iron-image>
       </iron-image>
@@ -3133,7 +3133,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="byline">{{track.user.username}}</div><br>
         <div class="title">{{track.title}}</div>
       </div>
-      <paper-icon-button class="playpause" icon="{{_playingIcon(playing)}}" on-tap="_togglePlaying"></paper-icon-button>
+      <paper-icon-button class="playpause" icon="{{_playingIcon(playing)}}"></paper-icon-button>
     </div>
 
     <sc-player id="player" track="{{track}}" config="{{config}}" playing="{{playing}}"></sc-player>
@@ -3204,7 +3204,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <carbon-route route="[[route]]" matches="search" subroute="{{searchRoute}}"></carbon-route>
     <carbon-route route="[[route]]" matches="playing/:trackid" trackid="{{trackid}}"></carbon-route>
 
-    <iron-ajax url="http://api.soundcloud.com/tracks/{{trackid}}?client_id={{config.clientId}}" last-response="{{currentTrack}}" auto=""></iron-ajax>
+    <iron-ajax url="//api.soundcloud.com/tracks/{{trackid}}?client_id={{config.clientId}}" last-response="{{currentTrack}}" auto=""></iron-ajax>
 
     <app-drawer-layout force-narrow="">
 

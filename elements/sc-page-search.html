@@ -58,7 +58,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <carbon-route route="[[route]]" matches=":query" query="{{query}}"></carbon-route>
 
-    <iron-ajax id="queryAjax" url="http://api.soundcloud.com/tracks?q={{uri(query)}}&limit=20&client_id={{config.clientId}}&oauth_token={{user.oauthToken}}" debounce-duration="300" last-response="{{tracks}}" auto="{{bool(query)}}"></iron-ajax>
+    <iron-ajax id="queryAjax" url="//api.soundcloud.com/tracks?q={{uri(query)}}&limit=20&client_id={{config.clientId}}&oauth_token={{user.oauthToken}}" debounce-duration="300" last-response="{{tracks}}" auto="{{bool(query)}}"></iron-ajax>
 
     <paper-input id="input" class="short" no-label-float placeholder="Search" value="{{query}}">
       <iron-icon icon="search" prefix></iron-icon>
