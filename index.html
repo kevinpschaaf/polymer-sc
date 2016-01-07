@@ -3230,7 +3230,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <iron-image class="artwork" placeholder="resources/item-logo.png" src="{{_medArtwork(track.artwork_url)}}" sizing="cover">
         <iron-image class="artwork blur" placeholder="resources/item-logo.png" src="{{_medArtwork(track.artwork_url)}}" sizing="cover"></iron-image>
       </iron-image>
-      <div class="details">
+      <div class="details" hidden="" hidden$="{{!track}}">
         <div class="byline">{{track.user.username}}</div><br>
         <div class="title">{{track.title}}</div>
       </div>
