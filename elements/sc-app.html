@@ -97,7 +97,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <iron-ajax url="//api.soundcloud.com/tracks/{{trackid}}?client_id={{config.clientId}}" last-response="{{currentTrack}}" auto></iron-ajax>
 
-    <app-drawer-layout force-narrow>
+    <app-drawer-layout force-narrow id="drawer">
 
       <div drawer>
 
@@ -106,7 +106,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-toolbar>
 
         <!-- Nav on mobile: side nav menu -->
-        <paper-menu selected="[[page]]" attr-for-selected="name">
+        <paper-menu selected="[[page]]" attr-for-selected="name" activate-event="">
           <a name="explore" href="#/explore">
             <paper-item><iron-icon icon="explore"></iron-icon>Explore</paper-item>
           </a>
@@ -201,6 +201,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         trackid: {
           value: null
+        },
+        page: {
+          observer: '_pageChanged'
         }
       },
       ready: function() {
@@ -209,6 +212,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         script.src = 'https://connect.soundcloud.com/sdk/sdk-3.0.0.js';
         script.onload = this._sdkLoaded.bind(this);
         document.head.appendChild(script);
+      },
+      _pageChanged: function() {
+        this.$.drawer.opened = false;
       },
       _sdkLoaded: function() {
         var token = this.oauthToken = localStorage.getItem('polymer-sc-oauth');
