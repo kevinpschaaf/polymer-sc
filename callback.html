@@ -21,7 +21,8 @@
         if (token) {
           localStorage.setItem('polymer-sc-oauth', token);
         }
-        window.location.href = '/index.build.html/#explore';
+        window.location.href = window.location.origin +
+            window.location.pathname.replace(/(.*\/)[^\/]*/, '$1index.build.html/#explore');
       }
     </script>
   </body>
