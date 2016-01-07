@@ -3178,8 +3178,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--layout-horizontal);
         @apply(--layout-center-center);
       }
-      paper-item a {
-        @apply(--layout-fit);
+      paper-menu a {
+        display: block;
+      }
+      paper-item {
+        pointer-events: none;
       }
       paper-item iron-icon {
         margin-right: 16px;
