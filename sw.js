@@ -8,7 +8,7 @@ this.addEventListener('install', function(event) {
           'resources/item-logo.png',
           'resources/toolbar-logo.png',
           'callback.html',
-          'http://fonts.googleapis.com/css?family=RobotoDraft:regular,bold,italic,thin,light,bolditalic,black,medium&lang=en'
+          'https://fonts.googleapis.com/css?family=RobotoDraft:regular,bold,italic,thin,light,bolditalic,black,medium&lang=en'
         ]);
       })
     })
@@ -28,6 +28,9 @@ var possiblyRedirect = function(request) {
   //   request = new Request('index.sw.html');
   //   console.log('SW: redirected request:', request.url);
   // }
+  if (request.url.startsWith('http://fonts.googleapis.com')) {
+    request = new Request(request.url.replace(/^http/, 'https'));
+  }
   return request;
 };
 
