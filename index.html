@@ -2922,7 +2922,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <carbon-route route="[[route]]" matches=":query" query="{{query}}"></carbon-route>
 
-    <iron-ajax id="queryAjax" url="//api.soundcloud.com/tracks?q={{uri(query)}}&amp;limit=20&amp;client_id={{config.clientId}}&amp;oauth_token={{user.oauthToken}}" debounce-duration="300" last-response="{{tracks}}" auto="{{bool(query)}}"></iron-ajax>
+    <iron-ajax id="queryAjax" url="//api.soundcloud.com/tracks?q={{uri(query)}}&amp;limit=20&amp;client_id={{config.clientId}}{{_oauthToken(user.oauthToken)}}" debounce-duration="300" last-response="{{tracks}}" auto="{{bool(query)}}"></iron-ajax>
 
     <paper-input id="input" class="short" no-label-float="" placeholder="Search" value="{{query}}">
       <iron-icon icon="search" prefix=""></iron-icon>
@@ -2986,7 +2986,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <template is="dom-if" if="{{user}}">
 
-      <iron-ajax url="//api.soundcloud.com/me/activities?oauth_token={{user.oauthToken}}&amp;client_id={{config.clientId}}" last-response="{{items}}" auto="{{user.oauthToken}}"></iron-ajax>
+      <iron-ajax url="//api.soundcloud.com/me/activities?client_id={{config.clientId}}{{_oauthToken(user.oauthToken)}}" last-response="{{items}}" auto="{{user.oauthToken}}"></iron-ajax>
 
       <div class="list">
         <template is="dom-repeat" items="{{tracks}}" as="track">
@@ -3055,7 +3055,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <template is="dom-if" if="{{user}}">
 
-      <iron-ajax url="//api.soundcloud.com/me/playlists?oauth_token={{user.oauthToken}}&amp;client_id={{config.clientId}}" last-response="{{playlists}}" auto="{{user.oauthToken}}"></iron-ajax>
+      <iron-ajax url="//api.soundcloud.com/me/playlists?client_id={{config.clientId}}{{_oauthToken(user.oauthToken)}}" last-response="{{playlists}}" auto="{{user.oauthToken}}"></iron-ajax>
 
       <div class="list">
         <template is="dom-repeat" items="{{playlists}}" as="playlist">
