@@ -34,11 +34,11 @@ var possiblyRedirect = function(request) {
 var cachedFetch = function(request) {
   return caches.match(request).then(function(response) {
     if (response) {
-      console.log('CACHE: got [' + request.url + ']');
+      // console.log('CACHE: got [' + request.url + ']');
       return response;
     } else {
       return fetch(request).then(function(response) {
-        console.log('NETWORK: got [' + request.url + ']');
+        // console.log('NETWORK: got [' + request.url + ']');
         possiblyCache(request, response);
         return response;
       }).catch(function(error) {
@@ -52,12 +52,12 @@ var cachedFetch = function(request) {
 var possiblyCache = function(request, response) {
   var type = responseType(request, response);
   if (type === 'image') {
-    console.log('SW: NOCACHE [' + type + ']: ' + request.url);
+    // console.log('SW: NOCACHE [' + type + ']: ' + request.url);
   } else {
     if (!response.bodyUsed) {
       caches.open('v1').then(function(cache) {
         cache.put(request, response.clone());
-        console.log('SW: cache [' + type + ']: ' + request.url);
+        // console.log('SW: cache [' + type + ']: ' + request.url);
       });
     }
   }
