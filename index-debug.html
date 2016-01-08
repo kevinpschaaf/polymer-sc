@@ -2393,6 +2393,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <g id="explore"><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"></path></g>
 <g id="library-books"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"></path></g>
 <g id="library-music"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 5h-3v5.5c0 1.38-1.12 2.5-2.5 2.5S10 13.88 10 12.5s1.12-2.5 2.5-2.5c.57 0 1.08.19 1.5.51V5h4v2zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6z"></path></g>
+<g id="volume-down"><path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"></path></g>
+<g id="volume-mute"><path d="M7 9v6h4l5 5V4l-5 5H7z"></path></g>
+<g id="volume-up"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></g>
 </defs></svg>
 </iron-iconset-svg><dom-module id="sc-item-track" assetpath="elements/">
 
@@ -3365,7 +3368,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <paper-tab name="playlists"><a href="#/playlists">My Playlists</a></paper-tab>
                 </template>
                 <template is="dom-if" if="[[trackid]]">
-                  <paper-tab name="playing"><a href="#/playing/{{trackid}}">Now Playing</a></paper-tab>
+                  <paper-tab name="playing"><a href="#/playing/{{trackid}}">Now Playing <iron-icon icon="volume-up" hidden$="{{!playing}}"></iron-icon></a></paper-tab>
                 </template>
               </paper-tabs>
             </template>
@@ -3388,7 +3391,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <sc-page-playlists config="[[config]]" user="{{user}}"></sc-page-playlists>
         </template>
         <template is="dom-if" name="playing">
-          <sc-page-playing config="[[config]]" track="[[currentTrack]]"></sc-page-playing>
+          <sc-page-playing config="[[config]]" track="[[currentTrack]]" playing="{{playing}}"></sc-page-playing>
         </template>
         <template is="dom-if" name="user">
           <sc-page-user config="[[config]]" user="{{user}}" on-request-login="_doLogin" on-request-logout="_doLogout"></sc-page-user>
