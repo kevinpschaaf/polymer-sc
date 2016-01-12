@@ -2396,6 +2396,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <g id="volume-down"><path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"></path></g>
 <g id="volume-mute"><path d="M7 9v6h4l5 5V4l-5 5H7z"></path></g>
 <g id="volume-up"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></g>
+<g id="cloud-done"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17 15.18 9l1.41 1.41L10 17z"></path></g>
+<g id="cloud-download"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"></path></g>
+<g id="cloud-off"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4c-1.48 0-2.85.43-4.01 1.17l1.46 1.46C10.21 6.23 11.08 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3 0 1.13-.64 2.11-1.56 2.62l1.45 1.45C23.16 18.16 24 16.68 24 15c0-2.64-2.05-4.78-4.65-4.96zM3 5.27l2.75 2.74C2.56 8.15 0 10.77 0 14c0 3.31 2.69 6 6 6h11.73l2 2L21 20.73 4.27 4 3 5.27zM7.73 10l8 8H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h1.73z"></path></g>
 </defs></svg>
 </iron-iconset-svg><dom-module id="sc-item-track" assetpath="elements/">
 
@@ -3219,11 +3222,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: #aaa;
         bottom: ;
       }
-      .playpause {
+      .buttons {
         position: absolute;
         right: 8px;
         bottom: 8px;
         color: white;
+      }
+      .buttons > paper-icon-button {
         height: 64px;
         width: 64px;
       }
@@ -3237,7 +3242,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="byline">{{track.user.username}}</div><br>
         <div class="title">{{track.title}}</div>
       </div>
-      <paper-icon-button class="playpause" icon="{{_playingIcon(playing)}}"></paper-icon-button>
+      <div class="buttons">
+        <paper-icon-button hidden="{{!offlineTracks}}" icon="{{_savedIcon(offlineTracks.*, track)}}" on-tap="_toggleSaved"></paper-icon-button>
+        <paper-icon-button icon="{{_playingIcon(playing)}}"></paper-icon-button>
+      </div>
     </div>
 
     <sc-player id="player" track="{{track}}" config="{{config}}" playing="{{playing}}"></sc-player>
@@ -3391,10 +3399,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <sc-page-playlists config="[[config]]" user="{{user}}"></sc-page-playlists>
         </template>
         <template is="dom-if" name="playing">
-          <sc-page-playing config="[[config]]" track="[[currentTrack]]" playing="{{playing}}"></sc-page-playing>
-        </template>
-        <template is="dom-if" name="user">
-          <sc-page-user config="[[config]]" user="{{user}}" on-request-login="_doLogin" on-request-logout="_doLogout"></sc-page-user>
+          <sc-page-playing config="[[config]]" track="[[currentTrack]]" playing="{{playing}}" offline-tracks="{{offlineTracks}}"></sc-page-playing>
         </template>
       </lazy-pages>
 

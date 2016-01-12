@@ -1,3 +1,5 @@
+//////
+
 this.addEventListener('install', function(event) {
   event.waitUntil(
     caches.delete('v1').then(function() {
@@ -82,4 +84,39 @@ var responseType = function(request, response) {
       break;
   }
   return type;
+};
+
+self.addEventListener("message", function(e) {
+  var fn = commands[e.data.command];
+  if (fn) {
+    var ret = fn.call(this, e.data);
+    clients.matchAll().then(function(c) {
+      c[0].postMessage(ret);
+    });
+  } else {
+    console.error('[sw] Unknown command:', e.data.command);
+  }
+});
+
+var commands = {
+
+  saveTrack: function(data) {
+    return caches.open('v1').then(function(cache) {
+      return cache.addAll(data.files);
+    });
+  },
+
+  deleteTrack: function(data) {
+    return caches.open('v1').then(function(cache) {
+      return Promise.all(data.files.map(function(file) {
+        return cache.delete(file);
+      }));
+      // return cache.keys().then(function(response) {
+      //   return response.forEach(function(element) {
+      //     return cache.delete(element);
+      //   });
+      // });
+    });
+  }
+
 };
